@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.goods">
+  <class name="Goods" table="l_goods">
+  	<!-- 配置主键 -->
+  	<id name="id" column="g_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="name" column="g_name" type="string"/>
+	<property name="code" column="g_code" type="string"/>
+	<property name="inPrice" column="g_inPrice" type="double"/>
+	<property name="inventory" column="g_inventory" type="string"/>
+	<property name="money" column="g_money" type="double"/>
+	<property name="credit" column="g_credit" type="double"/>
+	<property name="moneyCre" column="g_moneyCre" type="double"/>
+	<property name="creditMon" column="g_creditMon" type="double"/>
+	<property name="createTime" column="g_createTime" type="string"/>
+	<property name="remark" column="g_remark" type="string"/>
+	
+	<property name="typeId" column="g_typeId" type="string"/>
+	<property name="factoryId" column="g_factoryId" type="string"/>
+	<property name="userId" column="g_userId" type="string"/>
+	
+	<many-to-one name="factory" column="g_factoryId" class="com.soft.laboratory.model.device.DeviceFactory" insert="false" update="false" lazy ="proxy" />
+    <many-to-one name="type" column="g_typeId" class="com.soft.laboratory.model.device.DeviceType" insert="false" update="false" lazy ="proxy"/>
+	<many-to-one name="user" column="g_userId" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+  </class>
+
+</hibernate-mapping>
