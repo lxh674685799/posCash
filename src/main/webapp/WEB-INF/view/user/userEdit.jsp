@@ -117,17 +117,17 @@ function emptyOrg(){
             <tr>
                 <td align="right" class="tabRight">登录帐号:</td>
                 <td align="left" class="left">
-                <input name="account" type="text" id="account"  value="${user.account }"/></td>               
+                <input name="account" type="text" id="account"  value="${user.account }"/><font color="red">*必填</font></td>               
             </tr>       
             <tr>
                 <td align="right" class="tabRight">登录密码:</td>
                 <td align="left" class="left">
-                <input name="passWord" type="password" id="passWord" value="${user.passWord}"/></td>               
+                <input name="passWord" type="password" id="passWord" value="${user.passWord}"/><font color="red">*必填</font></td>               
             </tr>  
              <tr>
                 <td align="right" class="tabRight">真实姓名:</td>
                 <td align="left" class="left">
-                <input name="name" type="text" id="name" value="${user.name}"/></td>               
+                <input name="name" type="text" id="name" value="${user.name}"/><font color="red">*必填</font></td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight" valign="top">性别:</td>
@@ -151,7 +151,7 @@ function emptyOrg(){
                 <td align="left" class="left">
                 <input name="postId" type="hidden" id="postId" value="${user.post.id }">
                 <input name="postName" type="text" id="postName" readonly
-						 onclick="showMenu(); return false;" value="${user.post.name }" /></td>               
+						 onclick="showMenu(); return false;" value="${user.post.name }" /><font color="red">*必填</font></td>               
             </tr> 
                  <tr>
                 <td align="right" class="tabRight">所属角色：</td>
@@ -161,7 +161,7 @@ function emptyOrg(){
 				<c:forEach var="r" items="${roles }">
 				<option value="${r.id }" <c:if test="${r.id == user.role.id }">selected</c:if>>${r.name }</option>
 				</c:forEach>
-				</select>               
+				</select>  <font color="red">*必填</font>             
             </tr> 
               <tr>
                 <td align="right" class="tabRight">备注:</td>

@@ -10,27 +10,12 @@
         {
             $("#portalMain").ligerPortal({
                 columns: [{
-                    width: 580,
-                    panels: [{
-                        title: '内部消息',
-                        width: '100%',
-                        height: 300,
-                        url: '${ctx}/home/portal/messageList.do'
-                    },
+                    panels: [
                     {
                         title: '通知公告',
-                        width: 1170,
-                        height: 350,
+                        width: 1000,
+                        height: 320,
                         url: '${ctx}/home/portal/noticeList.do'
-                    }
-                    ]
-                }, {
-                    width: 580,
-                    panels: [{
-                        title: '任务列表',
-                        width: '100%',
-                        height: 300,
-                        url: '${ctx}/home/portal/taskList.do'
                     }
                     ]
                 }]
@@ -40,7 +25,12 @@
 
 </head>
 <body style="padding:10px">
-        <div style="width:100%;" id="portalMain"> 
-        </div> 
+
+ 	<div style="width:100%;"> 上的发送到发送到双方都放大f  //创建两个大的按钮  进行 充值和收银
+ 	
+ 	发的发的是
+ 	</div> 
+
+        <div style="width:100%;" id="portalMain"> </div> 
 </body>
 </html>

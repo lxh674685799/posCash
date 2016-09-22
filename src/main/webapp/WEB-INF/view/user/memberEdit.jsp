@@ -46,12 +46,12 @@ $(function(){
               <tr>
                 <td align="right" class="tabRight">会员编号:</td>
                 <td align="left" class="left">
-                <input name="memberNo" type="text" id="memberNo" value="${member.memberNo }" /></td>               
+                <input name="memberNo" type="text" id="memberNo" value="${member.memberNo }" /><font color="red">*必填</font></td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight">真实姓名:</td>
                 <td align="left" class="left">
-                <input name="name" type="text" id="name" value="${member.name}"/></td>               
+                <input name="name" type="text" id="name" value="${member.name}"/><font color="red">*必填</font></td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight" valign="top">性别:</td>
@@ -63,7 +63,7 @@ $(function(){
             <tr>
                 <td align="right" class="tabRight">联系电话:</td>
                 <td align="left" class="left">
-                <input name="phone" type="text" id="phone" value="${member.phone }" /></td>               
+                <input name="phone" type="text" id="phone" value="${member.phone }" /><font color="red">*必填</font></td>               
             </tr>
              <tr>
                 <td align="right" class="tabRight">充值金额:</td>
