@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.device">
+  <class name="DeviceBuy" table="l_devicebuy">
+  	<!-- 配置主键 -->
+  	<id name="id" column="b_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="number" column="b_number" type="long"/>
+	<property name="price" column="b_price" type="double"/>
+	<property name="buyTime" column="b_buytime" type="string"/>
+ 	<property name="ratifyTime" column="b_ratifytime" type="string"/>
+ 	<property name="doTime" column="b_dotime" type="string"/>
+	<property name="remark" column="b_remark" type="string"/>
+	<property name="status" column="b_status" type="integer"/>
+	<property name="fileId" column="b_fileId" type="string"/>
+	<property name="deviceId" column="b_deviceid" type="string"/>
+	<property name="buyUserId" column="b_buyuserid" type="string"/>
+	<property name="ratifyUserId" column="b_ratifyuserid" type="string"/>
+	<property name="deviceResource" column="b_deviceResource" type="string"/>
+	<property name="financialResources" column="b_financialResources" type="string"/>
+	<property name="billNumber" column="b_billNumber" type="string"/>
+	<property name="amount" column="b_amount" type="double"/>
+
+	<many-to-one name="buyUser" column="b_buyuserid" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+	<many-to-one name="device" column="b_deviceid" class="Device" insert="false" update="false" lazy ="proxy" />
+    <many-to-one name="ratifyUser" column="b_ratifyuserid" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+
+  </class>
+  
+</hibernate-mapping>
+
+	

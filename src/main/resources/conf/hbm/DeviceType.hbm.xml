@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- 设备类型 -->
+<hibernate-mapping package="com.soft.laboratory.model.device">
+  <class name="DeviceType" table="l_device_type">
+  	<!-- 配置主键 -->
+  	<id name="id" column="type_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+  	<property name="classNumber" column="type_classNumber" type="string"/>
+	<property name="name" column="type_name" type="string"/>
+	<property name="parentId" column="type_parentId" type="string" />
+	<property name="isParent" column="type_isParent" type="true_false"/>
+	<property name="remark" column="type_remark" type="string"/>
+	<property name="path" column="type_path" type="string"/>
+		
+  </class>
+</hibernate-mapping>

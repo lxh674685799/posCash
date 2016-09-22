@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.user">
+  <class name="SysRole" table="l_role">
+  	<!-- 配置主键 -->
+  	<id name="id" column="r_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="name" column="r_name" type="string"/>
+	<property name="remark" column="r_remark" type="string"/>
+
+	<bag name="resources" table="l_role_resource">
+ 		<key column="r_id"/>
+ 		<many-to-many column="resource_id" class="com.soft.laboratory.model.SysResource" />
+ 	</bag>
+ 	
+  </class>
+</hibernate-mapping>

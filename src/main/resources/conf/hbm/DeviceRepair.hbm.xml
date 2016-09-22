@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.device">
+  <class name="DeviceRepair" table="l_deviceRepair">
+  	<!-- 配置主键 -->
+  	<id name="id" column="r_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="sendDate" column="r_sendDate" type="string"/>
+	<property name="repairDate" column="r_repairDate" type="string"/>
+	<property name="repairStatus" column="r_repairStatus" type="int"/>
+	<property name="remark" column="r_remark" type="string"/>
+	
+	<property name="deviceIds" column="r_deviceIds" type="string"/>
+	<property name="repairUserId" column="r_repairUserId" type="string"/>
+	<property name="repairUserName" column="r_repairUserName" type="string"/>
+	<property name="sendUserId" column="r_sendUserId" type="string"/>
+	
+    <many-to-one name="repairUser" column="r_repairUserId" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+    <many-to-one name="sendUser" column="r_sendUserId" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+	
+  </class>
+
+</hibernate-mapping>
+
+	

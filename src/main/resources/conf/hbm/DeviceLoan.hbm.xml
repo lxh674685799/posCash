@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.device">
+  <class name="DeviceLoan" table="l_deviceLoan">
+  	<!-- 配置主键 -->
+  	<id name="id" column="l_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="loanTime" column="l_loanTime" type="string"/>
+	<property name="returnTime" column="l_returnTime" type="string"/>
+	<property name="trueReturnTime" column="l_trueReturnTime" type="string"/>
+	<property name="status" column="l_status" type="int"/>
+	<property name="remark" column="l_remark" type="string"/>
+	<property name="deviceIds" column="l_deviceIds" type="string"/>
+	<property name="forWhat" column="l_forWhat" type="string"/>
+	
+	<property name="loanUserId" column="l_loanUserId" type="string"/>
+	<property name="loanedUserId" column="l_loanedUserId" type="string"/>
+	<property name="loanedUserName" column="l_loanedUserName" type="string"/>
+	<property name="postId" column="l_postId" type="string"/>
+	
+    <many-to-one name="loanUser" column="l_loanUserId" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+    <many-to-one name="loanedUser" column="l_loanedUserId" class="com.soft.laboratory.model.user.SysUser" insert="false" update="false" lazy ="proxy" />
+    <many-to-one name="post" column="l_postId" class="com.soft.laboratory.model.user.SysOrg" insert="false" update="false" lazy ="proxy" />
+	 
+  </class>
+
+</hibernate-mapping>
+
+	

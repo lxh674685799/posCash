@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.user">
+  <class name="SysOrg" table="l_org">
+  	<!-- 配置主键 -->
+  	<id name="id" column="p_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+  	<property name="code" column="p_code" type="string"/>
+	<property name="name" column="p_name" type="string"/>
+	<property name="parentId" column="p_parentId" type="string" />
+	<property name="isParent" column="p_isParent" type="true_false"/>
+	<property name="user" column="p_user" type="string" />
+	<property name="address" column="p_adddress" type="string" />
+	<property name="phone" column="p_phone" type="string" />
+	<property name="remark" column="r_remark" type="string"/>
+	<property name="path" column="r_path" type="string"/>
+  </class>
+</hibernate-mapping>
+
+	

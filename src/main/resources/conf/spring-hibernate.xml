@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:tx="http://www.springframework.org/schema/tx"  
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd" default-autowire="byName" default-lazy-init="false">
+
+	<!-- 自动扫描dao和service包(自动注入)-->
+	<context:component-scan base-package="com.soft.laboratory.dao.*" />
+	<context:component-scan base-package="com.soft.laboratory.service.*" />
+  
+	<!-- 加载service,此时要排除要controller,因为controller已经spring-mvc中加载过了 -->
+	<context:component-scan base-package="com.soft.*">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:/conf/jdbc.properties" />
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<!-- 配置session工厂 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>  
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>  
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>  
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>  
+				<prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop> 
+				<!-- 数据库会话（连接）的生存范围 
+				<prop key="hibernate.current_session_context_class">thread</prop>-->
+				<!-- 数据库连接池的大小 -->
+				<prop key="hibernate.connection.pool_size">5</prop> 
+			</props>
+		</property>
+		<property  name="mappingResources">
+			<list>
+				<value>conf/hbm/SysResource.hbm.xml</value>
+				<value>conf/hbm/SysUser.hbm.xml</value>
+				<value>conf/hbm/SysMember.hbm.xml</value>
+				<value>conf/hbm/SysRole.hbm.xml</value>
+				<value>conf/hbm/SysOrg.hbm.xml</value>
+				<value>conf/hbm/DeviceFactory.hbm.xml</value>
+				<value>conf/hbm/DeviceType.hbm.xml</value>
+				<value>conf/hbm/Device.hbm.xml</value>
+				<value>conf/hbm/DeviceBuy.hbm.xml</value>
+				<value>conf/hbm/InnerMessage.hbm.xml</value>
+				<value>conf/hbm/File.hbm.xml</value>
+				<value>conf/hbm/Laboratory.hbm.xml</value>
+				<value>conf/hbm/DeviceEntity.hbm.xml</value>
+				<value>conf/hbm/DeviceLoan.hbm.xml</value>
+				<value>conf/hbm/DeviceRepair.hbm.xml</value>
+				<value>conf/hbm/DeviceGet.hbm.xml</value>
+				<value>conf/hbm/Notice.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 配置事物管理 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- 标注类型 的事务配置-->
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
+	
+	<!-- 这是事务通知操作，使用的事务管理器引用自 transactionManager 
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>   -->
+         <!-- 指定哪些方法需要加入事务，这里懒惰一下全部加入，可以使用通配符来只加入需要的方法  
+            <tx:method name="insert*" propagation="REQUIRED" />  
+            <tx:method name="update*" propagation="REQUIRED" />  
+            <tx:method name="delete*" propagation="REQUIRED" />  
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="query*" propagation="REQUIRED" read-only="true"/>  
+            <tx:method name="*" propagation="REQUIRED" />  
+        </tx:attributes>  
+    </tx:advice>  -->  
+</beans>

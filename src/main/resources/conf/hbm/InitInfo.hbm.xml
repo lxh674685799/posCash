@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model">
+  <class name="InitInfo" table="i_initInfo">
+  	<!-- 配置主键 -->
+  	<id name="id" column="i_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="voucherNumber" column="i_voucherNumber" type="string"/>
+	<property name="code" column="i_code" type="string"/>
+	<property name="classNumber" column="i_classNumber" type="string"/>
+	<property name="deviceName" column="i_deviceName" type="string"/>
+	<property name="type" column="i_type" type="string"/>
+	<property name="standard" column="i_standard" type="string"/>
+	<property name="deviceResource" column="i_deviceResource" type="string"/>
+	<property name= "financialResources"  column= "i_financialResources"   type= "string" />
+	<property name= "buyDate"  column= "i_buyDate"   type= "string" />
+	<property name= " price"  column= " i_price"   type= "string" />
+	<property name= "amount"  column= "i_amount"   type= "string" />
+	<property name= "totalMoney"  column= "i_totalMoney"   type= "string" />
+	<property name= "nationality"  column= "i_nationality"   type= "string" />
+	<property name= "classification"  column= "i_classification"   type= "string" />
+	<property name= "productionDate"  column= "i_productionDate"   type= "string" />
+	<property name= "manufactureFactory"  column= "i_manufactureFactory"   type= "string" />
+	<property name= "user"  column= "i_user"   type= "string" />
+	<property name= " billNumber"  column= " i_billNumber"   type= "string" />
+	<property name= "changeDate"  column= "i_changeDate"   type= "string" />
+	<property name= " statusCode"  column= " i_statusCode"   type= "string" />
+	<property name= "useDirection"  column= "i_useDirection"   type= "string" />
+	<property name= "unitNumber"  column= "i_unitNumber"   type= "string" />
+	<property name= "unitName"  column= "i_unitName"   type= "string" />
+	<property name= "locationName"  column= "i_locationName"   type= "string" />
+	<property name= "barCode"  column= "i_barCode"   type= "string" />
+	
+  </class>
+
+</hibernate-mapping>

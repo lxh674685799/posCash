@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.user">
+  <class name="SysUser" table="l_user">
+  	<!-- 配置主键 -->
+  	<id name="id" column="u_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="name" column="u_name" type="string"/>
+	<property name="account" column="u_account" type="string"/>
+	<property name="passWord" column="u_pws" type="string"/>
+	<property name="sex" column="u_sex" type="true_false"/>
+	<property name="email" column="u_email" type="string" />
+	<property name="phone" column="u_phone" type="string"/>
+	<property name="remark" column="u_remark" type="string"/>
+	<property name="roleId" column="u_roleId" type="string"/>
+	<property name="postId" column="u_postId" type="string"/>
+	<property name="postName" column="u_postName" type="string"/>
+
+	<many-to-one name="role" column="u_roleId" class="SysRole" insert="false" update="false" lazy ="proxy"/>
+	<many-to-one name="post" column="u_postId" class="SysOrg" insert="false" update="false" lazy ="proxy"/>
+  </class>
+</hibernate-mapping>
+
+	

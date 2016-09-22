@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>f</short-name>     
+	<uri>http://www.lxh.cn/functions</uri>     
+	
+	<!--样式标签-->
+	<tag>
+		<name>link</name>
+		<description>样式标签</description>  
+		<tag-class>com.soft.core.tag.StyleTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>href</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+	 <description>Const常量</description>
+        <name>Const</name>
+        <tag-class>com.soft.core.tag.ConstTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>必填参数var：指定初始化MyConstant中某个变量，为空则报异常</description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+         </attribute>
+        <attribute>
+            <description>变量作用范围(默认为page)</description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+         </attribute>
+	</tag>
+</taglib>
+
