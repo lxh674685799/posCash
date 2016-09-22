@@ -33,7 +33,7 @@ public class Testxx{
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
-		//ExcelUtil util = ExcelUtil.getInstance() ;
+		//ExcelUtil util = ExcelUtil.getInstance() ;1122sss
 		//List<DeviceFactory> list = (List<DeviceFactory>) this.factoryService.listAll(new DeviceFactory());
 		
 		System.out.println("---------------------");
