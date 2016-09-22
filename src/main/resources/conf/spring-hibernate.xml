@@ -57,15 +57,8 @@
 				<value>conf/hbm/SysOrg.hbm.xml</value>
 				<value>conf/hbm/DeviceFactory.hbm.xml</value>
 				<value>conf/hbm/DeviceType.hbm.xml</value>
-				<value>conf/hbm/Device.hbm.xml</value>
-				<value>conf/hbm/DeviceBuy.hbm.xml</value>
 				<value>conf/hbm/InnerMessage.hbm.xml</value>
 				<value>conf/hbm/File.hbm.xml</value>
-				<value>conf/hbm/Laboratory.hbm.xml</value>
-				<value>conf/hbm/DeviceEntity.hbm.xml</value>
-				<value>conf/hbm/DeviceLoan.hbm.xml</value>
-				<value>conf/hbm/DeviceRepair.hbm.xml</value>
-				<value>conf/hbm/DeviceGet.hbm.xml</value>
 				<value>conf/hbm/Notice.hbm.xml</value>
 			</list>
 		</property>

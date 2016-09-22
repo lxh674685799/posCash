@@ -78,11 +78,7 @@ function submitForm(){
 				</tr>
 			</table>
 			</div>
-		<div class="banquan">
-		为获得最佳浏览效果：建议使用IE7以上版本及1024*768分辨率
-		<br/>
-		技术支持：中原工学院软件学院
-		</div>
+	
 	</div>
 	</div>
 </form>

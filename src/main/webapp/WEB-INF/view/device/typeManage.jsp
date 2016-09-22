@@ -5,7 +5,7 @@
 <%@page import="com.soft.core.web.ResultMessage"%>
 
 <head>
-    <title>设备类型列表</title>
+    <title>商品类型列表</title>
         <script type="text/javascript">
 		//菜单
 		var menu;
@@ -13,7 +13,7 @@
 		var treeNodelickAble=true; 
 		//当前访问
 		
-		var treeNodes = [{"id":-1,"name":"设备类型",isParent:true,"path":"1."}];
+		var treeNodes = [{"id":-1,"name":"商品类型",isParent:true,"path":"1."}];
 		var returnUrl="";
 		$(function()
 		{
@@ -128,7 +128,7 @@
 </head>
 <body>
 <div id="layout">
-	<div position="left" title="设备类型">
+	<div position="left" title="商品类型">
 		<div id="typeTree" class="ztree" style="overflow:auto;height:100%;clear:both;"></div>
 	</div>
 	<div position="center">

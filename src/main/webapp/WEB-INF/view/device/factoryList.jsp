@@ -5,7 +5,7 @@
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <html>
 <head>
-<title>设备厂家列表</title>
+<title>商品厂家列表</title>
 
 <script type="text/javascript">
 function toAdd(){
@@ -21,7 +21,7 @@ function imp(){
 
 <body>
 <fieldset class="fieldset">
-	<legend class="legend">设备厂家查询</legend>
+	<legend class="legend">商品厂家查询</legend>
 <form action="list.do" method="post" id="searchform" name="searchform">
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
 		<tr>
@@ -45,8 +45,6 @@ function imp(){
 		<display:caption class="tooltar_btn">
 		<input type="button" value="添 加" name="add" class="btn_small" onclick="toAdd()" />
 		<input type="button" value="删除" name="toDel" class="btn_small" onclick="mycheckbox()"/>	
-		<input type="button" value="导出" name="toExp" class="btn_small" onclick="exp()"/>	
-		<input type="button" value="导入" name="toImp" class="btn_small" onclick="imp()"/>
 		</display:caption>
 		
 		<!-- 多选框 -->

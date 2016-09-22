@@ -3,7 +3,7 @@
 <%@include file="/commons/include/vaild.jsp" %>
 <html>
 <head>
-<title>编辑设备类型信息</title>
+<title>编辑商品类型信息</title>
 </head>
 
 <script type="text/javascript">
@@ -35,7 +35,7 @@ $(function(){
     <form name="form" method="post" action="save.do" id="form">
 		<fieldset class="fieldset" style="padding: 5px 5px">
 		<c:if test="${type.id == null }">
-		<legend class="legend">添加设备类型信息</legend>
+		<legend class="legend">添加商品类型信息</legend>
 		</c:if>
 		<c:if test="${type.id != null }">
 			<legend class="legend">修改【${type.name }】信息</legend>
@@ -49,12 +49,12 @@ $(function(){
        
         <table cellpadding="0" cellspacing="0" class="table_add" >
         <tr>
-                <td align="right" class="tabRight">设备分类号:</td>
+                <td align="right" class="tabRight">商品分类号:</td>
                 <td align="left" class="left">
                 <input name="classNumber" type="text" id="classNumber"  value="${type.classNumber }" /></td>               
             </tr>  
             <tr>
-                <td align="right" class="tabRight">设备类型名称:</td>
+                <td align="right" class="tabRight">商品类型名称:</td>
                 <td align="left" class="left">
                 <input name="name" type="text" id="name"  value="${type.name }" /></td>               
             </tr>       
