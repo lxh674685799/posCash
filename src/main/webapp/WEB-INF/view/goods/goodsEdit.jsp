@@ -17,14 +17,22 @@ $(function(){
 			typeName:{required:true},
 			factoryId:{required:true},
 			code:{required:true,number:true},
-			inPrice:{required:true,number:true}
+			inPrice:{required:true,number:true},
+			credit:{required:true,number:true},
+			money:{required:true,number:true},
+			moneyCre:{required:true,number:true},
+			creditMon:{required:true,number:true}
 		},
 		messages:{
-			name:{required:"请输入设备型号！"},
-			typeName:{required:"请选择设备类别！"},
-			factoryId:{required:"请选择设备厂家！"},
-			code:{required:"请输入设备条码！",number:"条码只能为数字！"},
-			inPrice:{required:"请输入国别码！",number:"国别码只能为数字！"}
+			name:{required:"请输入商品名称！"},
+			typeName:{required:"请选择商品类别！"},
+			factoryId:{required:"请选择供货商！"},
+			code:{required:"请输入商品条码！",number:"条码只能为数字！"},
+			inPrice:{required:"请输入进货价！",number:"进货价只能为数字！"},
+			credit:{required:"请输入销售积分！",number:"积分只能为数字！"},
+			money:{required:"请输入销售金额！",number:"金额只能为数字！"},
+			moneyCre:{required:"请输入销售金额！",number:"金额只能为数字！"},
+			creditMon:{required:"请输入销售积分！",number:"积分只能为数字！"}
 		}
 	});
 });
@@ -140,7 +148,7 @@ function emptyOrg(){
              <tr>
                 <td align="right" class="tabRight">商品条码:</td>
                 <td align="left" class="left">
-                <input name="code" type="text" id="code" value="${goods.code }" /></td>               
+                <input name="code" type="text" id="code"  <c:if test="${not empty goods.code}">readonly = "readonly" </c:if> value="${goods.code }" /></td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight">进货价:</td>
@@ -148,27 +156,42 @@ function emptyOrg(){
                 <input name="inPrice" type="text" id="inPrice" value="${goods.inPrice}" /></td>               
             </tr> 
             <tr>
-                <td align="right" class="tabRight">销售价（现金）:</td>
+                <td align="center"  colspan="2"  bgcolor="#AEDCE6">销售价（现金）</td>
+              </tr> 
+            <tr>
+                <td align="right" class="tabRight">现金(元):</td>
                 <td align="left" class="left">
                 <input name="money" type="text" id="money" value="${goods.money}" /></td>               
             </tr> 
             <tr>
-                <td align="right" class="tabRight">销售价（积分）:</td>
-                <td align="left" class="left">
+                <td align="center"  colspan="2" bgcolor="#AEDCE6">销售价（积分）</td>
+              </tr> 
+            <tr>
+            	 <td align="center" class="tabRight" >积分:</td>
+                <td align="left" class="left" colspan="2">
                 <input name="credit" type="text" id="credit" value="${goods.credit }" /></td>               
             </tr> 
+            <!-- #d1ddf1 -->
+             <tr>
+                <td align="center"  colspan="2" bgcolor="#AEDCE6">销售价（现金+积分）</td>
+              </tr>
             <tr >
-                <td align="right" class="tabRight" rowspan="2">销售价（现金+积分）:</td>
+                <td align="right" class="tabRight" >现金(元):</td>
                 <td align="left" class="left">
                 <input name="moneyCre" type="text" id="moneyCre" value="${goods.moneyCre }" />
                 </td> 
-                              
             </tr> 
-            <tr>
+            <tr >
+                <td align="right" class="tabRight" >积分:</td>
+                <td align="left" class="left">
+                <input name="creditMon" type="text" id="creditMon" value="${goods.creditMon }" />
+                </td> 
+            </tr> 
+            <%-- <tr>
                 <td align="right" class="tabRight">库存（件）:</td>
                 <td align="left" class="left">
                 <input name="inventory" type="text" id="inventory" value="${goods.inventory }" /></td>               
-            </tr> 
+            </tr>  --%>
               <tr>
                 <td align="right" class="tabRight">备注:</td>
                 <td align="left" class="left"> 

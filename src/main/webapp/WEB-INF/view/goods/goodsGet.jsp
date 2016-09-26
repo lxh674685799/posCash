@@ -32,30 +32,24 @@
             </tr> 
              <tr>
                 <td align="right" class="tabRight">进货价:</td>
-                <td align="left" class="left">${goods.inPrice }</td>               
+                <td align="left" class="left">${goods.inPrice }&nbsp;元</td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight">销售价（现金）:</td>
                 <td align="left" class="left">
-                ${goods.money}元</td>               
+                ${goods.money}&nbsp;元</td>               
             </tr>
               <tr>
                 <td align="right" class="tabRight">销售价（积分）:</td>
                 <td align="left" class="left">
-                ${goods.credit }积分</td>               
+                ${goods.credit }&nbsp;积分</td>               
             </tr> 
               <tr>
                 <td align="right" class="tabRight">销售价（现金+积分）:</td>
                 <td align="left" class="left"> 
-                ${device.moneyCre}元+${device.creditMon}积分
+                ${goods.moneyCre}&nbsp;元&nbsp;+&nbsp;${goods.creditMon}&nbsp;积分
                 </td>
             </tr>            
-            <tr>
-                <td align="right" class="tabRight">库存:</td>
-                <td align="left" class="left">
-              		${goods.inventory}
-                </td>        
-            </tr>
             <tr>
                 <td align="right" class="tabRight">创建时间:</td>
                 <td align="left" class="left">

@@ -21,11 +21,11 @@ function imp(){
 
 <body>
 <fieldset class="fieldset">
-	<legend class="legend">商品厂家查询</legend>
+	<legend class="legend">供货商查询</legend>
 <form action="list.do" method="post" id="searchform" name="searchform">
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
 		<tr>
-			<td width="15%" align="right">厂家名称：</td>
+			<td width="15%" align="right">供货商名称：</td>
 			<td width="25%" align="left">
 			<input type="text" class="text" name="name" id="name" value="${param.name }" /></td>
 			<td width="15%" align="right">联系人：</td>
@@ -53,11 +53,11 @@ function imp(){
 		<input type="checkbox" name="id" value="${f.id}" id="id"/>
 		</display:column>
 		
-		<display:column title="厂商名称" style="text-align:left;"property="name"></display:column>
+		<display:column title="供货商名称" style="text-align:left;"property="name"></display:column>
 		<display:column title="电话" property="phone" style="text-align:right;"></display:column> 
 		<display:column title="联系人" property="linkName" style="text-align:right;"></display:column> 
 		<display:column title="联系人电话" property="mobile" style="text-align:right;"></display:column> 
-		<display:column title="地址" property="address" style="text-align:right;"></display:column> 
+		<display:column title="地址" property="address" style="text-align:right;" maxLength="20"></display:column> 
 		<display:column title="操作">
 			<a href="${ctx}/device/factory/edit.do?id=${f.id}">修改</a>
 			<a href="${ctx}/device/factory/del.do?id=${f.id}">删除</a>

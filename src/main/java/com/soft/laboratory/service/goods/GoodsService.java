@@ -20,5 +20,12 @@ public class GoodsService extends GenericService<Goods> {
 	protected GenericDao<Goods> getEntityDao() {
 		return goodsDao;
 	}
+	
+	/**
+	 * 通过商品编码得到商品
+	 */
+	public Goods getByCode(String code) {
+		return goodsDao.getByCode(code);
+	}
 
 }

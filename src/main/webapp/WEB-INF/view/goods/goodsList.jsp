@@ -6,7 +6,7 @@
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <html>
 <head>
-<title>设备列表</title>
+<title>商品列表</title>
 
 <script type="text/javascript">
 function toAdd(){
@@ -17,16 +17,16 @@ function toAdd(){
 
 <body>
 <fieldset class="fieldset">
-	<legend class="legend">设备查询</legend>
+	<legend class="legend">商品查询</legend>
 <form action="list.do" method="post" id="searchform" name="searchform">
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
 		<tr>
 			<td width="15%" align="right">商品名称：</td>
 			<td width="25%" align="left">
 			<input type="text" class="text" name="name" id="name" value="${goods.name }" /></td>
-			<td width="15%" align="right">商品编码：</td>
+			<td width="15%" align="right">商品条码：</td>
 			<td width="25%" align="left">
-			<input type="text" class="text" name="name" id="name" value="${goods.code}" /></td>
+			<input type="text" class="text" name="code" id="code" value="${goods.code}" /></td>
 	
 			<td width="20%"  rowspan="2" align="left" valign="middle">
 				<input type="submit"  value="查 询" class="btn_query" /> 
@@ -54,16 +54,21 @@ function toAdd(){
 		
 		<display:column title="商品名称" style="text-align:left;"property="name">
 		</display:column>
-		<display:column title="设备条码" property="code" style="text-align:right;"></display:column> 
-		<display:column title="商品类型" property="f.type.name" style="text-align:right;"></display:column> 
-		<display:column title="国别码" property="countryCode" style="text-align:right;"></display:column>
+		<display:column title="商品条码" property="code" style="text-align:right;"></display:column> 
+		 <display:column title="商品类型"  style="text-align:right;">
+		 		${f.type.name}
+		 </display:column> 
 		<display:column title="供货商"  style="text-align:right;">
 			<a href="${ctx}/device/factory/get.do?factoryId=${f.factoryId}">${f.factory.name}</a>
 		</display:column>
-		 <display:column title="库存" property="inventory" style="text-align:right;"></display:column> 
+		<display:column title="销售价"  style="text-align:right;">
+				${f.inPrice}元
+		</display:column>
+		 <%-- <display:column title="库存" property="inventory" style="text-align:right;"></display:column>  --%>
 		<display:column title="操作">
 			<a href="${ctx}/goods/goods/edit.do?id=${f.id}">修改</a>
 			<a href="${ctx}/goods/goods/del.do?id=${f.id}">删除</a>
+			<a href="${ctx}/goods/goods/get.do?id=${f.id}">详情</a>
 		</display:column>
 	</display:table>	
 	</form>	

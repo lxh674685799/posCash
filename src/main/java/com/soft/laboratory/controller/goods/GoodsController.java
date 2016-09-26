@@ -18,8 +18,10 @@ import com.soft.core.syscontext.SystemContext;
 import com.soft.core.util.DateFormatUtil;
 import com.soft.core.util.RequestUtil;
 import com.soft.core.web.ResultMessage;
+import com.soft.laboratory.model.device.DeviceFactory;
 import com.soft.laboratory.model.goods.Goods;
 import com.soft.laboratory.model.user.SysUser;
+import com.soft.laboratory.service.device.DeviceFactoryService;
 import com.soft.laboratory.service.goods.GoodsService;
 @Controller
 @RequestMapping({ "/goods/goods" })
@@ -27,6 +29,8 @@ public class GoodsController extends GenericController {
 
 	@Resource
 	private GoodsService goodsService;
+	@Resource
+	private DeviceFactoryService factoryService;
 	
 	/**
 	 * 得到所有的商品
@@ -55,7 +59,6 @@ public class GoodsController extends GenericController {
 		Page pagination = new Page(page, total);
 		String order ="order by d.id desc";
 		List<Goods> list = goodsService.listByPage(pagination,goods,order);
-		
 		ModelAndView mv= getAutoView(request);
 		mv.addObject("page",pagination).addObject("Goods", list).addObject("goods", goods);
 		return mv;		
@@ -75,7 +78,7 @@ public class GoodsController extends GenericController {
 		String userId = loginUser.getId();
 		ResultMessage message = null;
 		if(goods.getId().equals("")){
-			List<Goods> exit = goodsService.isNameExistAdd(goods.getName(), "code");
+			List<Goods> exit = goodsService.isNameExistAdd(goods.getCode(), "code");
 			if(exit.size()>0){
 				message = new ResultMessage(Const.MESSAGE_ERROR, "添加失败，商品编号已存在！");
 			}else{
@@ -85,14 +88,12 @@ public class GoodsController extends GenericController {
 				message = new ResultMessage(Const.MESSAGE_SUCCESS, "添加商品成功！");
 			}	
 		}else{	
-			//商品如果存在就修改 不存在就增加
-			List<Goods> exit = goodsService.isNameExistUpdate(goods.getName(), "code", goods.getId());
+			List<Goods> exit = goodsService.isNameExistUpdate(goods.getCode(), "code", goods.getId());
 			if(exit.size()>0){
+				message = new ResultMessage(Const.MESSAGE_ERROR, "修改失败，商品编号已存在！");
+			}else{
 				goodsService.update(goods);
 				message = new ResultMessage(Const.MESSAGE_SUCCESS, "修改商品成功！");
-			}else{
-				goodsService.add(goods);
-				message = new ResultMessage(Const.MESSAGE_SUCCESS, "添加商品成功！");
 			}
 		}
 		addMessage(message, request);
@@ -117,8 +118,9 @@ public class GoodsController extends GenericController {
 		}else{
 			goods= new Goods();
 		}
+		List<DeviceFactory> deviceFactorys = (List<DeviceFactory>) factoryService.listAll(new DeviceFactory());
 		return mv.addObject("returnUrl", returnUrl)
-				.addObject("goods", goods);	
+				.addObject("goods", goods).addObject("factorys",deviceFactorys);	
 	}
 	
 	/**
@@ -131,7 +133,7 @@ public class GoodsController extends GenericController {
 	public ModelAndView get(HttpServletRequest request) throws Exception {
 		ModelAndView mv = getAutoView(request);
 		String returnUrl = RequestUtil.getPrePage(request);
-		String id = request.getParameter("factoryId");
+		String id = request.getParameter("id");
 		Goods goods = goodsService.getById(id);	
 		return mv.addObject("returnUrl", returnUrl).addObject("goods", goods);		
 	}

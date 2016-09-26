@@ -3,7 +3,7 @@
 <%@include file="/commons/include/vaild.jsp" %>
 <html>
 <head>
-<title>编辑设备厂商信息</title>
+<title>编辑供货商信息</title>
 
 <script type="text/javascript">
 $(function(){
@@ -12,13 +12,15 @@ $(function(){
 		form:"form",
 		rules:{
 			name:{required:true},
-			phone:{isTel:true},
-			mobile:{isTel:true},
+			/* phone:{isTel:true}, */
+			mobile:{required:true,isTel:true},
+			address:{maxlength:50}
 		},
 		messages:{
-			name:{required:"请输入厂家名称！"},
-			phone:{isTel:"电话号码格式错误！"},
-			mobile:{isTel:"电话号码格式错误！"}
+			name:{required:"请输入供货商名称！"},
+			/* phone:{isTel:"电话号码格式错误！"}, */
+			mobile:{required:"请输入联系人手机号！",isTel:"手机号格式错误！"},
+			address:{maxlength:"地址长度要求小于50个字符！"}
 		}
 	});
 });
@@ -30,10 +32,10 @@ $(function(){
     <form name="form" method="post" action="save.do" id="form">
 		<fieldset class="fieldset" style="padding: 5px 5px">
 		<c:if test="${factory.id == null }">
-			<legend class="legend">添加厂商信息</legend>
+			<legend class="legend">添加供货商信息</legend>
 		</c:if>
 		<c:if test="${factory.id != null }">
-			<legend class="legend">修改【${factory.name }】厂商信息</legend>
+			<legend class="legend">修改【${factory.name }】供货商信息</legend>
 		</c:if>
 	
 		<!-- 保留字段 -->
