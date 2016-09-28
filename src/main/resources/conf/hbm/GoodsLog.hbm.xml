@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.goods">
+  <class name="GoodsLog" table="l_goods_log">
+  	<!-- 配置主键 -->
+  	<id name="id" column="g_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="goodsInfo" column="g_goods_info" type="text" length="65535" />  <!-- 如果设置为text 会默认为longtext -->
+	<property name="checkType" column="g_check_type" type="string"/>
+	<property name="countMoney" column="g_count_money" type="string"/>
+	<property name="countCredit" column="g_count_credit" type="string"/>
+	<property name="memberUserId" column="g_member_user_id" type="string"/>
+	<property name="createTime" column="g_create_time" type="string"/>
+	<property name="createUserId" column="g_create_user_id" type="string"/>
+  </class>
+
+</hibernate-mapping>
