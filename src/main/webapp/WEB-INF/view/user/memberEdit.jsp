@@ -46,7 +46,9 @@ $(function(){
               <tr>
                 <td align="right" class="tabRight">会员编号:</td>
                 <td align="left" class="left">
-                <input name="memberNo" type="text" id="memberNo" value="${member.memberNo }" /><font color="red">*必填</font></td>               
+                <input name="memberNo" type="text" id="memberNo"  value="${member.memberNo }"<c:if test="${member.id != null }">
+			readonly="readonly"
+		</c:if> /><font color="red">*必填</font></td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight">真实姓名:</td>
