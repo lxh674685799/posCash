@@ -1,7 +1,7 @@
 <%@page language="java" pageEncoding="UTF-8"%>
 <%@include file="/commons/include/get.jsp" %>
 <head>
-<title>实验中心设备管理平台</title>
+<title>乐分商城收银系统</title>
 <link type="text/css" rel="stylesheet" href="${ctx }/resources/styles/login.css"/>
 <script type="text/javascript">
 $(function(){
