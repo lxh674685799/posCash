@@ -498,12 +498,13 @@ right:0;
   color: #ffffff;
   font-size: 18px;
   font-weight: bold;
-  height: 60px;
+  height: 20px;
   line-height: 24px;
   margin-right: 30px;
   margin-top: 15px;
   text-align: center; 
-  width: 125px; 
+  width: 85px; 
+  padding: 20px;
 }
 #countDiv{
 /* background-color:#EDEDED; */
@@ -568,7 +569,7 @@ body, html {
   		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
   		<div style='float:left;' id="totalDiv">0&nbsp;元&nbsp;0&nbsp;卷</div>
   </div> 
-   <div class="queren"><div class='btn_queren' onclick="checkOutGoods()">确认</div></div>
+   <div class="queren"><div class='btn_queren'onclick="checkOutGoods()">确认</div></div>
    <div id='calculateDiv'>
  	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:</div><div id='calculateOutput' style="float:left;font-size: 20px"></div>  
  	</div>
