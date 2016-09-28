@@ -167,7 +167,7 @@ function emptyOrg(){
                 <td align="center"  colspan="2" bgcolor="#AEDCE6">销售价（积分）</td>
               </tr> 
             <tr>
-            	 <td align="center" class="tabRight" >积分:</td>
+            	 <td align="center" class="tabRight" >积分(卷):</td>
                 <td align="left" class="left" colspan="2">
                 <input name="credit" type="text" id="credit" value="${goods.credit }" /></td>               
             </tr> 
@@ -182,7 +182,7 @@ function emptyOrg(){
                 </td> 
             </tr> 
             <tr >
-                <td align="right" class="tabRight" >积分:</td>
+                <td align="right" class="tabRight" >积分(卷):</td>
                 <td align="left" class="left">
                 <input name="creditMon" type="text" id="creditMon" value="${goods.creditMon }" />
                 </td> 

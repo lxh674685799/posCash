@@ -44,9 +44,9 @@ public class GoodsController extends GenericController {
 			HttpServletResponse response,Goods goods) throws Exception {
 		SysUser loginUser =SystemContext.getCurrentUser(request);
 		String id = loginUser.getId();
-		if(!id.equals(Const.SYSTEM_ADMIN_ID)){
+		/*if(!id.equals(Const.SYSTEM_ADMIN_ID)){
 			goods.setUserId(loginUser.getId());
-		}
+		}*/
 		int page =1;
 		int total = 0;
 		if(request.getParameter("page")!=null){
