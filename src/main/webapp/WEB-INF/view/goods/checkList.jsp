@@ -26,7 +26,7 @@ $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
 	//绑定键盘事件
-	$('body').keypress(function(event){
+	$('#body').keypress(function(event){
 		if(event.keyCode == 27){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
@@ -48,7 +48,7 @@ $(function(){
 			 	if(sumMoney > inputVal){
 					$.ligerDialog.warn("金额数小于结账总金额数！");
 				}else{
-					$("#calculateOutput").val(inputVal*1 - sumMoney*1);
+					$("#calculateOutput").text(inputVal*1 - sumMoney*1);
 					//进行商品信息后台保存操作 并还原数组
 					addToGoodsStr();
 					addGoodsLog();
@@ -121,12 +121,12 @@ function asynQueryGoods(){
 			 addCountRow(totalMoney,0);
              index++;
              
-             var h = $("#checkGoods").height();
+             /* var h = $("#checkGoods").height();
              
              var hh = $("body").height() -  $("#countTypeDiv").height() - $("#top").height()-20;
              if(h >= hh){
             	 alert(h);
-             }
+             } */
              
              
 		},
@@ -241,6 +241,15 @@ function asynQueryGoods(){
 		//设置结账方式
 		checkType = 3;
 	}
+	
+	//结账运算
+	var inputVal = $("#calculateInput").val();
+ 	if(sumMoney > inputVal){
+		$.ligerDialog.warn("金额数小于结账总金额数！");
+	}else{
+		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+	} 
+ 	
  }
  
  //计算总账
@@ -251,7 +260,10 @@ function asynQueryGoods(){
 	var countTd = $("<td>总价</td><td colspan='5' name='payforSum'>"+countMoney+"&nbsp;元&nbsp;"+countCredit+"&nbsp;卷"+"</td>");
 	countRow.append(countTd);
 	table.append(countRow); */
-	 $("boby").children("#countDiv").children("#totalDiv").html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
+	//html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
+	  $("#body").children("#countDiv").children("#totalDiv").html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
+	//alert(h);
+	 //
  }
  
  
@@ -319,6 +331,15 @@ function asynQueryGoods(){
 	 
 	//设置结账方式
 	checkType = 1;
+	
+	//结账运算
+	var inputVal = $("#calculateInput").val();
+ 	if(sumMoney > inputVal){
+		$.ligerDialog.warn("金额数小于结账总金额数！");
+	}else{
+		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+	} 
+ 	
  }
  //积分结账
  function numericalPayfor(){
@@ -339,6 +360,14 @@ function asynQueryGoods(){
 	 
 	//设置结账方式
 	checkType = 2;
+	//结账运算
+	var inputVal = $("#calculateInput").val();
+ 	if(sumMoney > inputVal){
+		$.ligerDialog.warn("金额数小于结账总金额数！");
+	}else{
+		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+	} 
+ 	
  }
  //混合结账 现金和积分
  function admixPayfor(){
@@ -361,6 +390,15 @@ function asynQueryGoods(){
 	 
 	//设置结账方式
 	checkType = 3;
+	
+	//结账运算
+	var inputVal = $("#calculateInput").val();
+ 	if(sumMoney > inputVal){
+		$.ligerDialog.warn("金额数小于结账总金额数！");
+	}else{
+		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+	} 
+ 	
  }
  //获取商品信息放在数组中
  function  addToGoodsStr(){
@@ -386,7 +424,10 @@ function asynQueryGoods(){
 		//还原数组为空
 		goodsStr = [];
 	});
-	
+ }
+ 
+ function checkOutGoods(){
+	 alert("说说");
  }
 </script>
 <style type="text/css">
@@ -419,14 +460,50 @@ function asynQueryGoods(){
     width: 100px;
 }
 #calculateDiv{
+ margin-right:150px; 
+*margin-right:150px; 
 background-color:#D1D1D1;
-width:400px;
+width:380px;
+height:66px;
+position:fixed;
+bottom:70px;
+right:0;
+font-size: 16px;
+ padding-top:15px; 
+
+
+}
+.credit{
+margin-right:150px; 
+*margin-right:150px; 
+background-color:#D1D1D1;
+width:380px;
 height:80px;
 position:fixed;
 bottom:0;
 right:0;
 font-size: 16px;
-padding-right:5px;
+}
+.queren{
+background-color:#D1D1D1;
+width:150px;
+height:151px;
+position:fixed;
+bottom:0;
+right:0;
+}
+.btn_queren{
+ background: #3873F2  no-repeat scroll 0 0;
+  border: medium none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  height: 60px;
+  line-height: 24px;
+  margin-right: 30px;
+  margin-top: 15px;
+  text-align: center; 
+  width: 125px; 
 }
 #countDiv{
 /* background-color:#EDEDED; */
@@ -436,14 +513,14 @@ height:70px;
 position:fixed;
 bottom:0;
 left:0;
-font-size: 16px;
-padding-left:20px;
+font-size: 20px;
+padding-left:30px;
 }
 
 #countTypeDiv{
 background-color:#D1D1D1;
-width:100%;
-height:126px;
+width:58%;
+height:135px;
 position:fixed;
 bottom:0;
 left:0;
@@ -453,8 +530,10 @@ padding-top:16px;
 body, html {
     height: 100%;
 }
+
+
 </style>
-<body>
+<body id="body">
 <div class='top' id="top">
 <fieldset class="fieldset">
 	<legend class="legend">商品查询</legend>
@@ -482,16 +561,23 @@ body, html {
 		</tr>
 	</thead>
 	</table>
- <div id="countTypeDiv">
+   <div id="countTypeDiv">
  	<table id='payForTable' border='0' cellpadding='2' cellspacing='1' width='100%' ><tr><td align='center'><input type='button' value='现金结账' class='btn_payfor'  onclick='cashPayfor()'/></td> <td  align='center'><input type='button' value='积分结账' class='btn_payfor' onclick='numericalPayfor()' /></td> <td align='center'><input type='button' value='现金和积分结账' class='btn_payforMix' onclick='admixPayfor()' /></td> </tr></table>
- </div>	
- <div id='calculateDiv'><div style='float:left;'><div style='font-weight:bold'>收入金额</div><input type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold'>找零</div><input type='text' value='' id='calculateOutput' /></div></div>
+ </div>	 
   <div id='countDiv'>
   		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
   		<div style='float:left;' id="totalDiv">0&nbsp;元&nbsp;0&nbsp;卷</div>
-  </div>
-  <div style="height:30px;width:100%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
+  </div> 
+   <div class="queren"><div class='btn_queren' onclick="checkOutGoods()">确认</div></div>
+   <div id='calculateDiv'>
+ 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:</div><div id='calculateOutput' style="float:left;font-size: 20px"></div>  
+ 	</div>
+ </div>  
+<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div>
+ 
+    <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
              Esc键清空页面所有数据，Enter键确认输入
    </div> 
+
 </body>
 </html>
