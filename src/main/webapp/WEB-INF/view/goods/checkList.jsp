@@ -129,9 +129,8 @@ function asynQueryGoods(){
 			//增加结算行
 			 addCountRow(totalMoney,0);
              index++;
-             
-              var h = $("#checkGoods").height();
-             
+             //把table拉到底部
+             var h = $("#checkGoods").height();
              var hh = $("body").height() -  $("#countTypeDiv").height() - $("#top").height()-20;
              if(h >= hh){
             	 var hei = $(document).height()-$(window).height();
