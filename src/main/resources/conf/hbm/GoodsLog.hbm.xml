@@ -13,6 +13,9 @@
 	<property name="checkType" column="g_check_type" type="string"/>
 	<property name="countMoney" column="g_count_money" type="string"/>
 	<property name="countCredit" column="g_count_credit" type="string"/>
+	<property name="receiveMoney" column="g_receive_money" type="string"/>
+	<property name="receiveCredit" column="g_receive_credit" type="string"/>
+	<property name="changeMoney" column="g_change_money" type="string"/>
 	<property name="memberUserId" column="g_member_user_id" type="string"/>
 	<property name="createTime" column="g_create_time" type="string"/>
 	<property name="createUserId" column="g_create_user_id" type="string"/>

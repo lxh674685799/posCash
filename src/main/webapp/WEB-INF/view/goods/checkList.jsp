@@ -26,7 +26,7 @@ var receiveMoney = 0;//收入金额
 
 var changeMoney = 0;//找零金额
 
-var  receiveCredit = 0;
+var receiveCredit = 0;//收入积分
 
 $(function(){
 	//初始化table值
@@ -55,14 +55,17 @@ $(function(){
 					$.ligerDialog.warn("金额数小于结账总金额数！");
 				}else{
 					$("#calculateOutput").text(inputVal*1 - sumMoney*1);
-					//进行商品信息后台保存操作 并还原数组
-					addToGoodsStr();
-					addGoodsLog();
 				} 
 			} 
 		});
 	
+	 //设置table的margin-top和margin-bottom
+	 var topHeight = $("#top").height();
+	 var bottomHeight = $("#countTypeDiv").height()
+	 $("#checkGoods").css({'margin-top':topHeight +2+ "px",'margin-bottom':bottomHeight + 20 + 'px'});
+	 
 });
+
 
 function asynQueryGoods(){
 	var goodsCode = $("#code").val();
@@ -127,12 +130,13 @@ function asynQueryGoods(){
 			 addCountRow(totalMoney,0);
              index++;
              
-             /* var h = $("#checkGoods").height();
+              var h = $("#checkGoods").height();
              
              var hh = $("body").height() -  $("#countTypeDiv").height() - $("#top").height()-20;
              if(h >= hh){
-            	 alert(h);
-             } */
+            	 var hei = $(document).height()-$(window).height();
+           	    $(document).scrollTop(hei);
+             }
              
              
 		},
@@ -249,27 +253,13 @@ function asynQueryGoods(){
 	}
 	
 	//结账运算
-	var inputVal = $("#calculateInput").val();
- 	if(sumMoney > inputVal){
-		$.ligerDialog.warn("金额数小于结账总金额数！");
-	}else{
-		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
-	} 
+	checkOutput();
  	
  }
  
  //计算总账
  function  addCountRow(countMoney,countCredit){
-	 /* table.children().children("#countRow").remove();
-	//增加结算信息
-	var countRow = $("<tr id='countRow' style='font-weight:bold;font-size:15px'></tr>");
-	var countTd = $("<td>总价</td><td colspan='5' name='payforSum'>"+countMoney+"&nbsp;元&nbsp;"+countCredit+"&nbsp;卷"+"</td>");
-	countRow.append(countTd);
-	table.append(countRow); */
-	//html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
 	  $("#body").children("#countDiv").children("#totalDiv").html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
-	//alert(h);
-	 //
  }
  
  
@@ -339,12 +329,7 @@ function asynQueryGoods(){
 	checkType = 1;
 	
 	//结账运算
-	var inputVal = $("#calculateInput").val();
- 	if(sumMoney > inputVal){
-		$.ligerDialog.warn("金额数小于结账总金额数！");
-	}else{
-		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
-	} 
+	checkOutput();
  	
  }
  //积分结账
@@ -367,12 +352,7 @@ function asynQueryGoods(){
 	//设置结账方式
 	checkType = 2;
 	//结账运算
-	var inputVal = $("#calculateInput").val();
- 	if(sumMoney > inputVal){
-		$.ligerDialog.warn("金额数小于结账总金额数！");
-	}else{
-		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
-	} 
+	checkOutput();
  	
  }
  //混合结账 现金和积分
@@ -398,16 +378,26 @@ function asynQueryGoods(){
 	checkType = 3;
 	
 	//结账运算
-	var inputVal = $("#calculateInput").val();
- 	if(sumMoney > inputVal){
-		$.ligerDialog.warn("金额数小于结账总金额数！");
-	}else{
-		$("#calculateOutput").text(inputVal*1 - sumMoney*1);
-	} 
+	checkOutput();
  	
+ }
+ //进行运算收入金额和找零
+ function checkOutput(){
+		var inputVal = $("#calculateInput").val();
+		if(inputVal == ""){
+			$("#calculateOutput").text("");
+			return;
+		}
+			
+	 	if(sumMoney > inputVal){
+			$.ligerDialog.warn("金额数小于结账总金额数！");
+		}else{
+			$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+		} 
  }
  //获取商品信息放在数组中 同时获取收入金额和找零
  function  addToGoodsStr(){
+	 //获取商品信息
 	 table.find("tr").each(function(index,g){
 		    var tdCode = $(this).children("[name='code']");//得到商品编码
 		    var tdName = $(this).children("[name='goodsName']");//得到商品名称
@@ -419,21 +409,42 @@ function asynQueryGoods(){
 		    	 var str = tdCode.text().trim() +"#"+ tdName.text().trim() +"#"+tdMoney.text().trim() +"#"+tdCredit.text().trim()+"#"+ numberHis.val()+"#"+tdPayType.val();
 				 goodsStr.push(str);
 		    }
-		    
 	});
+	//获取结账的收入金额，积分和找零
+	 receiveMoney = $("#calculateInput").val();
+	 changeMoney =  $("#calculateOutput").text();
+	 receiveCredit = $("#calculateCreditInput").val();
 	 
 	 
  }
  //向后台发送日志请求
  function addGoodsLog(){
-	$.post("${ctx}/goods/goodsLog/save.do",{goodsInfo:goodsStr.toString(),checkType:checkType,countMoney:sumMoney,countCredit:sumCredit},function(result){
+	$.post("${ctx}/goods/goodsLog/save.do",{goodsInfo:goodsStr.toString(),checkType:checkType,countMoney:sumMoney,countCredit:sumCredit,receiveMoney:receiveMoney,changeMoney:changeMoney,receiveCredit:receiveCredit},function(result){
 		//还原数组为空
 		goodsStr = [];
 	});
  }
- 
+ //确认按钮操作  
  function checkOutGoods(){
-	 alert("说说");
+	   //进行商品信息后台保存操作 并还原数组
+		addToGoodsStr();
+	   
+	   if(receiveCredit < sumCredit){
+		   $.ligerDialog.warn("收入积分小于总积分！");
+		   return;
+	   }
+		addGoodsLog();
+		
+		//延迟执行函数
+		setTimeout("reloadInfor()",200);
+
+ }
+ 
+ //刷新页面信息
+ function reloadInfor(){
+	 window.location.href = "${ctx}/goods/check/list.do";
+		//return false;
+	event.preventDefault();
  }
 </script>
 <style type="text/css">
@@ -469,7 +480,7 @@ function asynQueryGoods(){
  margin-right:150px; 
 *margin-right:150px; 
 background-color:#D1D1D1;
-width:380px;
+width:350px;
 height:66px;
 position:fixed;
 bottom:70px;
@@ -483,7 +494,7 @@ font-size: 16px;
 margin-right:150px; 
 *margin-right:150px; 
 background-color:#D1D1D1;
-width:380px;
+width:350px;
 height:80px;
 position:fixed;
 bottom:0;
@@ -526,7 +537,7 @@ padding-left:30px;
 
 #countTypeDiv{
 background-color:#D1D1D1;
-width:58%;
+width:66%;
 height:135px;
 position:fixed;
 bottom:0;
@@ -537,7 +548,21 @@ padding-top:16px;
 body, html {
     height: 100%;
 }
-
+.top{
+position: fixed;
+top: -5px;
+width: 100%;
+z-index: 100;
+background: #ffffff none repeat scroll 0 0;
+border: 1px solid #ccc;
+display: block;
+margin-top: 0;
+overflow: visible;
+} 
+/*  #checkGoods{
+margin-top: 62px;
+margin-bottom: 135px;
+}  */
 
 </style>
 <body id="body">
@@ -577,10 +602,10 @@ body, html {
   </div> 
    <div class="queren"><div class='btn_queren'onclick="checkOutGoods()">确认</div></div>
    <div id='calculateDiv'>
- 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:</div><div id='calculateOutput' style="float:left;font-size: 20px"></div>  
+ 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div><div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
  	</div>
  </div>  
-<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div>
+<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' /></div>
  
     <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
              Esc键清空页面所有数据，Enter键确认输入

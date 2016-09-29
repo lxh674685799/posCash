@@ -25,6 +25,18 @@ public class GoodsLog extends BaseModel{
 	 */
 	private String countCredit;
 	/**
+	 * 收入金额
+	 */
+	private String receiveMoney;
+	/**
+	 * 找零金额
+	 */
+	private String changeMoney;
+	/**
+	 * 收入积分 默认为0
+	 */
+	private String receiveCredit = "0";
+	/**
 	 * 会员id
 	 */
 	private String memberUserId;
@@ -84,6 +96,24 @@ public class GoodsLog extends BaseModel{
 	}
 	public void setCountCredit(String countCredit) {
 		this.countCredit = countCredit;
+	}
+	public String getReceiveMoney() {
+		return receiveMoney;
+	}
+	public void setReceiveMoney(String receiveMoney) {
+		this.receiveMoney = receiveMoney;
+	}
+	public String getChangeMoney() {
+		return changeMoney;
+	}
+	public void setChangeMoney(String changeMoney) {
+		this.changeMoney = changeMoney;
+	}
+	public String getReceiveCredit() {
+		return receiveCredit;
+	}
+	public void setReceiveCredit(String receiveCredit) {
+		this.receiveCredit = receiveCredit;
 	}
 	
 	

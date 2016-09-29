@@ -38,10 +38,13 @@ public class GoodsLogController extends GenericController {
 	 */
 	@RequestMapping({ "save" })
 	public void save(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String checkType = request.getParameter("checkType");
-		String countMoney = request.getParameter("countMoney");
-		String countCredit = request.getParameter("countCredit");
-		String[] goodsInfo = RequestUtil.getStringAryByStr(request, "goodsInfo");
+		String checkType = request.getParameter("checkType");//结账方式
+		String countMoney = request.getParameter("countMoney");//结账总金额
+		String countCredit = request.getParameter("countCredit");//结账总积分
+		String receiveMoney = request.getParameter("receiveMoney");//收入金额
+		String changeMoney = request.getParameter("changeMoney");//找零金额
+		String receiveCredit = request.getParameter("receiveCredit");//收入积分
+		String[] goodsInfo = RequestUtil.getStringAryByStr(request, "goodsInfo");//商品信息
 		
 		SysUser loginUser =SystemContext.getCurrentUser(request);
 		String userId = loginUser.getId();
@@ -54,6 +57,9 @@ public class GoodsLogController extends GenericController {
 			log.setCheckType(checkType);
 			log.setCountMoney(countMoney);
 			log.setCountCredit(countCredit);
+			log.setReceiveMoney(receiveMoney);
+			log.setReceiveCredit(receiveCredit);
+			log.setChangeMoney(changeMoney);
 			for(String str : goodsInfo){
 				GoodsInfo info = new GoodsInfo();
 				String[] strs = str.split("#");
