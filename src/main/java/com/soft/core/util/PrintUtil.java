@@ -6,48 +6,54 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.print.Book;
 import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import com.soft.laboratory.model.goods.GoodsInfo;
+import com.soft.laboratory.model.goods.GoodsLog;
 
 public class PrintUtil implements Printable {
 	
-    private ArrayList list;  
+    private List<GoodsInfo> list;  
     private String cashier;  
     private Font font;  
     private String sale_num;  
     private String sale_sum;  
     private String practical;  
     private String changes;  
-    private String orders;  
+    private String orders;
+    //总点卷
+    private String sale_credit;
+    //实收点卷
+    private String total_credit; 
 
     
     // 构造函数  
-    public PrintUtil(ArrayList list, String cashier, String orders, String sale_num, String sale_sum,  
-            String practical, String changes) {  
-        this.list = list;  
+    public PrintUtil(List<GoodsInfo> infos, String cashier,GoodsLog log,int saleNum) {  
+        this.list = infos;  
         // 收银员编号  
         this.cashier = cashier;  
         // 订单标号  
-        this.orders = orders;  
         // 商品总数  
-        this.sale_num = sale_num;  
+        this.sale_num = saleNum+"";  
         // 总金额  
-        this.sale_sum = sale_sum;  
+        this.sale_sum = log.getCountMoney(); 
+        // 总金额  卷
+        this.sale_credit = log.getCountCredit();
+        // 
+        this.total_credit = log.getReceiveCredit();
         // 实收  
-        this.practical = practical;  
+        this.practical = log.getReceiveMoney();  
         // 找零  
-        this.changes = changes;  
+        this.changes = log.getChangeMoney();  
     } 
     
 	@Override
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-		 Component c = null;  
+		
 	        // 转换成Graphics2D 拿到画笔  
 	        Graphics2D g2 = (Graphics2D) graphics;  
 	        // 设置打印颜色为黑色  
@@ -75,7 +81,7 @@ public class PrintUtil implements Printable {
 	        g2.setFont(font);// 设置字体  
 	        float heigth = font.getSize2D();// 字体高度  
 	        // 标题  
-	        g2.drawString("广西机电工程学校智能超市", (float) x, (float) y + heigth);  
+	        g2.drawString("乐分商城", (float) x, (float) y + heigth);  
 	        float line = 2 * heigth;  
 	  
 	        font = new Font("宋体", Font.PLAIN, 8);  
@@ -85,14 +91,14 @@ public class PrintUtil implements Printable {
 	        // 显示收银员  
 	        g2.drawString("收银员:" + cashier, (float) x, (float) y + line);  
 	        // 显示订单号  
-	        g2.drawString("订单号:" + orders, (float) x + 100, (float) y + line);  
-	  
+//	        g2.drawString("订单号:" + orders, (float) x + 100, (float) y + line);  
+//	  
 	        line += heigth;  
 	        // 显示标题  
 	        g2.drawString("名称", (float) x + 20, (float) y + line);  
 	        g2.drawString("单价", (float) x + 60, (float) y + line);  
-	        g2.drawString("数量", (float) x + 85, (float) y + line);  
-	        g2.drawString("总额", (float) x + 115, (float) y + line);  
+	        g2.drawString("点卷", (float) x + 85, (float) y + line);  
+	        g2.drawString("数量", (float) x + 115, (float) y + line);  
 	        line += heigth;  
 	        g2.drawLine((int) x, (int) (y + line), (int) x + 158, (int) (y + line));  
 	  
@@ -102,15 +108,13 @@ public class PrintUtil implements Printable {
 	        // 显示内容  
 	        for (int i = 0; i < list.size(); i++) {  
 	  
-	            Commodity commodity = list.get(i);  
+	        	GoodsInfo commodity = list.get(i);  
 	  
 	            g2.drawString(commodity.getName(), (float) x, (float) y + line);  
-	            line += heigth;  
-	  
-	            g2.drawString(commodity.getBarcode(), (float) x, (float) y + line);  
-	            g2.drawString(commodity.getUnit_price(), (float) x + 60, (float) y + line);  
-	            g2.drawString(commodity.getNum(), (float) x + 90, (float) y + line);  
-	            g2.drawString(commodity.getSum(), (float) x + 120, (float) y + line);  
+	            line += heigth;  	  
+	            g2.drawString(commodity.getMoney(), (float) x, (float) y + line);  
+	            g2.drawString(commodity.getCredit(), (float) x + 60, (float) y + line);  
+	            g2.drawString(commodity.getNumber(), (float) x + 90, (float) y + line);  
 	            line += heigth;  
 	  
 	        }  
@@ -119,10 +123,10 @@ public class PrintUtil implements Printable {
 	        g2.drawLine((int) x, (int) (y + line), (int) x + 158, (int) (y + line));  
 	        line += heigth;  
 	  
-	        g2.drawString("售出商品数:" + sale_num + "件", (float) x, (float) y + line);  
-	        g2.drawString("合计:" + sale_sum + "元", (float) x + 70, (float) y + line);  
+	        g2.drawString("兑换商品数:" + sale_num + "件", (float) x, (float) y + line);  
+	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "卷", (float) x + 70, (float) y + line);  
 	        line += heigth;  
-	        g2.drawString("实收:" + practical + "元", (float) x, (float) y + line);  
+	        g2.drawString("实收:" + practical + "元，"+ sale_credit + "卷", (float) x, (float) y + line);  
 	        g2.drawString("找零:" + changes + "元", (float) x + 70, (float) y + line);  
 	        line += heigth;  
 	        g2.drawString("时间:" + Calendar.getInstance().getTime().toLocaleString(), (float) x, (float) y + line);  
@@ -134,67 +138,10 @@ public class PrintUtil implements Printable {
 	        g2.drawString("钱票请当面点清，离开柜台恕不负责", (float) x, (float) y + line);  
 	        switch (pageIndex) {  
 	        case 0:  
-	  
 	            return PAGE_EXISTS;  
 	        default:  
 	            return NO_SUCH_PAGE;  
-	  
 	        }  
-	  
 	    }  
-	
-	
-
-    /** 
-     * 打印销售小票 
-     *  
-     * @param order 
-     *            订单号 
-     * @param num 
-     *            数量 
-     * @param sum 
-     *            总金额 
-     * @param practical 
-     *            实收 
-     * @param change 
-     *            找零 
-     */  
-    private void PrintSale(String order, String num, String sum, String practical, String change) {  
-        try {  
-            // 通俗理解就是书、文档  
-            Book book = new Book();  
-            // 设置成竖打  
-            PageFormat pf = new PageFormat();  
-            pf.setOrientation(PageFormat.PORTRAIT);  
-  
-            ArrayList<Commodity> cmd_list = new ArrayList<Commodity>();  
-            // 取出数据  
-            for (int i = 0; i < list.size(); i++) {  
-                Collect c = list.get(i);  
-                Commodity cd = new Commodity(c.getName(), String.valueOf(c.getSell()), String.valueOf(c.getNum()),  
-                        String.valueOf(c.getTotal()), c.getCode());  
-                cmd_list.add(cd);  
-            }  
-  
-            // 通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。  
-            Paper paper = new Paper();  
-            paper.setSize(158, 30000);// 纸张大小  
-            paper.setImageableArea(0, 0, 158, 30000);// A4(595 X  
-                                                        // 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72  
-            pf.setPaper(paper);  
-  
-            book.append(new SalesTicket(cmd_list, Windows.user_num, order, num, sum, practical, change), pf);  
-  
-            // 获取打印服务对象  
-            PrinterJob job = PrinterJob.getPrinterJob();  
-            // 设置打印类  
-            job.setPageable(book);  
-  
-            job.print();  
-        } catch (PrinterException e) {  
-            e.printStackTrace();  
-        }  
-    }  
-    
 
 }

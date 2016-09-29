@@ -1,13 +1,16 @@
 package com.soft.laboratory.controller.goods;
 
+import java.awt.print.Book;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONArray;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +20,14 @@ import com.soft.core.controller.GenericController;
 import com.soft.core.page.Page;
 import com.soft.core.syscontext.SystemContext;
 import com.soft.core.util.DateFormatUtil;
+import com.soft.core.util.PrintUtil;
 import com.soft.core.util.RequestUtil;
 import com.soft.laboratory.model.goods.GoodsInfo;
 import com.soft.laboratory.model.goods.GoodsLog;
 import com.soft.laboratory.model.user.SysUser;
 import com.soft.laboratory.service.goods.GoodsLogService;
+
+import net.sf.json.JSONArray;
 @Controller
 @RequestMapping({ "/goods/goodsLog" })
 public class GoodsLogController extends GenericController {
@@ -60,6 +66,8 @@ public class GoodsLogController extends GenericController {
 			log.setReceiveMoney(receiveMoney);
 			log.setReceiveCredit(receiveCredit);
 			log.setChangeMoney(changeMoney);
+			int saleNum =0;
+			
 			for(String str : goodsInfo){
 				GoodsInfo info = new GoodsInfo();
 				String[] strs = str.split("#");
@@ -70,14 +78,59 @@ public class GoodsLogController extends GenericController {
 				info.setNumber(strs[4]);
 				info.setPayType(strs[5]);
 				list.add(info);
+				
+				saleNum = saleNum + Integer.valueOf(strs[4]);
+				
 			}
 			String goodsInfoJson =JSONArray.fromObject(list).toString();
 			log.setGoodsInfo(goodsInfoJson);
 			goodsLogService.add(log);
+			
+			// 执行打印
+			PrintSale(log,list,loginUser,saleNum);
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * 打印小票
+	 * @param order
+	 * @param num
+	 * @param sum
+	 * @param practical
+	 * @param change
+	 */
+	private void PrintSale(GoodsLog log,List<GoodsInfo> infos,SysUser loginUser,int saleNum) {  
+        try {  
+        	
+            // 通俗理解就是书、文档  
+            Book book = new Book();  
+            // 设置成竖打  
+            PageFormat pf = new PageFormat();  
+            pf.setOrientation(PageFormat.PORTRAIT);  
+  
+            // 通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。  
+            Paper paper = new Paper();  
+            paper.setSize(158, 30000);// 纸张大小  
+            paper.setImageableArea(0, 0, 158, 30000);// A4(595 X  
+                                                        // 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72  
+            pf.setPaper(paper);  
+  
+            book.append(new PrintUtil(infos, loginUser.getAccount(),log,saleNum), pf);  
+  
+            // 获取打印服务对象  
+            PrinterJob job = PrinterJob.getPrinterJob();  
+            // 设置打印类  
+            job.setPageable(book);  
+  
+            job.print();  
+        } catch (PrinterException e) {  
+            e.printStackTrace();  
+        }  
+    }  
 	
 	
 	/**
