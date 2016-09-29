@@ -26,4 +26,8 @@ public class SysMemberService  extends GenericService<SysMember> {
 		return dao.getByNos(nos);
 	}
 	
+	public SysMember getByPhone(String phone) {
+		return dao.getByPhone(phone);
+	}
+	
 }

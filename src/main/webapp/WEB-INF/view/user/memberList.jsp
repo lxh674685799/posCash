@@ -66,7 +66,7 @@ function toAdd(){
 			<a href="${ctx}/user/member/edit.do?id=${f.id}">修改</a>
 			<a href="${ctx}/user/member/del.do?id=${f.id}">删除</a>
 			<a href="${ctx}/user/member/get.do?id=${f.id}">详情</a>   
-			<a href="${ctx}/user/member/addValue.do?id=${f.id}">会员充值</a>
+			<a href="${ctx}/user/member/toTopUp.do?id=${f.id}">会员充值</a>
 		</display:column>
 	</display:table>	
 	</form>	

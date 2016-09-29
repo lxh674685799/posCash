@@ -31,6 +31,12 @@ public class SysMemberController extends GenericController{
 	private SysMemberService memberService;
 
 	
+	/**
+	 * 编辑页面
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping({ "edit" })
 	public ModelAndView edit(HttpServletRequest request) throws Exception{
 		ModelAndView mv = getAutoView(request);
@@ -140,5 +146,47 @@ public class SysMemberController extends GenericController{
 		addMessage(message, request);
 		response.sendRedirect(preUrl);	
 	}
+	
+	/**
+	 * 会员充值
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping({ "topUp" })
+	public void topUp(HttpServletRequest request, HttpServletResponse response) throws IOException{		
+		String preUrl = request.getParameter("returnUrl");
+		String userId = request.getParameter("id");
+		Double mun = Double.valueOf(request.getParameter("mun"));
+		SysMember member= memberService.getById(userId);
+		member.setValueMnu(member.getValueMnu() +mun);
+		memberService.update(member);
+		ResultMessage message = new ResultMessage(Const.MESSAGE_SUCCESS, "充值成功！最新余额为:"+member.getValueMnu());
+		addMessage(message, request);
+		response.sendRedirect(preUrl);	
+	}
+	
+	
+	/**
+	 * 会员充值
+	 * @param request
+	 * @param response
+	 * @throws Exception 
+	 */
+	@RequestMapping({ "toTopUp" })
+	public ModelAndView toTopUp(HttpServletRequest request, HttpServletResponse response) throws Exception{		
+		ModelAndView mv = getAutoView(request);
+		String returnUrl = RequestUtil.getPrePage(request);
+		String userId = request.getParameter("id");
+		SysMember member = null;
+		if (userId != null) {
+			member= memberService.getById(userId);
+		}else{
+			member= new SysMember();
+		}	
+		return mv.addObject("returnUrl", returnUrl)
+				.addObject("member", member);	
+	}
+	
 
 }

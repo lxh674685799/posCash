@@ -25,5 +25,17 @@ public class SysMemberDao extends HibernateGenericDao<SysMember>{
 			return members.get(0);
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	public SysMember getByPhone(String phone) {
+		String hql="from SysMember s where s.phone = '" + phone +"'";
+		Map<String, Object> params = new HashMap<String,Object>();
+		List<SysMember> members = (List<SysMember>) this.listEntity(new Page(),hql, params);
+		if(members.size()==0){
+			return null;
+		}else{
+			return members.get(0);
+		}
+	}
 	
 }
