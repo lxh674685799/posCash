@@ -96,6 +96,8 @@ public class SysMemberController extends GenericController{
 			HttpServletResponse response,SysMember member) throws Exception {
 		int page =1;
 		int total = 0;
+		String forUp = request.getParameter("forUp");
+		
 		if(request.getParameter("page")!=null){
 			page = Integer.parseInt(request.getParameter("page"));
 			total = Integer.parseInt(request.getParameter("totalCount"));
@@ -109,7 +111,7 @@ public class SysMemberController extends GenericController{
 	
 		ModelAndView mv= getAutoView(request);
 		mv.addObject("page",pagination).addObject("member", member)
-			.addObject("members", members);
+			.addObject("members", members).addObject("forUp", forUp);
 		return mv;	
 	}
 

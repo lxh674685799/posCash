@@ -44,11 +44,13 @@ function toAdd(){
 
 <form id="form" method="post" action="del.do">
 	<display:table name="members" uid="f" cellpadding="0" class="blues" cellspacing="0" requestURI="${path }/user/member/list.do">
+		<c:if test="${forUp == null }">
+	
 		<display:caption class="tooltar_btn">
 			<input type="button" value="添 加" name="add" class="btn_small"
 				onclick="toAdd()" />
 		<input type="button" value="删除" name="del" class="btn_small" onclick="mycheckbox()"/>	
-		</display:caption>
+		</display:caption></c:if>
 		
 		<!-- 多选框 -->
 		<display:column
@@ -63,9 +65,11 @@ function toAdd(){
 		</display:column> 
 		<display:column title="联系电话" property="phone" style="text-align:right;"></display:column> 
 		<display:column title="操作">
+		<c:if test="${forUp == null }">
 			<a href="${ctx}/user/member/edit.do?id=${f.id}">修改</a>
 			<a href="${ctx}/user/member/del.do?id=${f.id}">删除</a>
 			<a href="${ctx}/user/member/get.do?id=${f.id}">详情</a>   
+			</c:if>
 			<a href="${ctx}/user/member/toTopUp.do?id=${f.id}">会员充值</a>
 		</display:column>
 	</display:table>	
