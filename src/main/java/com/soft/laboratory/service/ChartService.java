@@ -1,6 +1,7 @@
 package com.soft.laboratory.service;
 
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -27,6 +28,10 @@ public class ChartService  extends GenericService<ChartModel> {
 
 	public Map<String, String> queryByMonth(String monthStr) {
 		return dao.queryByMonth(monthStr);
+	}
+
+	public List queryByEmp(String yearMonth) {
+		return dao.queryByEmp(yearMonth);
 	}
 
 	

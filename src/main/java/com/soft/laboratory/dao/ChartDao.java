@@ -37,5 +37,12 @@ public class ChartDao extends HibernateGenericDao<ChartModel>{
 		 
 		return returnMap;
 	}
+
+	public List queryByEmp(String yearMonth) {
+		Session session = getSession(); 
+		List query = session.createSQLQuery("SELECT sum(lgl.g_count_money) as totalMoney,SUM(lgl.g_receive_credit) as totalCredit,lu.u_name as userName from l_goods_log lgl,l_user lu  "+
+		"where lgl.g_create_time LIKE '"+yearMonth+"%' and lu.u_id = lgl.g_create_user_id GROUP BY lu.u_name;").setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return query;
+	}
 	
 }

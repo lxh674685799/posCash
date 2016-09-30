@@ -2,6 +2,7 @@ package com.soft.laboratory.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.soft.core.controller.GenericController;
+import com.soft.core.util.DateFormatUtil;
 import com.soft.laboratory.service.ChartService;
 
 import net.sf.json.JSONArray;
@@ -39,6 +43,16 @@ public class ChartController extends GenericController {
 	public ModelAndView month(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		ModelAndView mv= getAutoView(request);
 		return mv;	
+	}
+	
+	@RequestMapping({ "emp" })
+	public ModelAndView emp(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		ModelAndView mv= getAutoView(request);
+		
+		//获取当前时间
+		String yearMonth = DateFormatUtil.format(new Date(), "yyyy-MM");
+			
+		return mv.addObject("yearMonth", yearMonth);	
 	}
 
 	/**
@@ -84,8 +98,31 @@ public class ChartController extends GenericController {
 	 * @throws Exception
 	 */
 	@RequestMapping({ "statisticByEmp" })
-	public void statisticByEmp(HttpServletRequest request,
+	@ResponseBody
+	public Map<String, List> statisticByEmp(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		
+		String yearMonth = request.getParameter("yearMonth");
+		List<Double> totalMoney = new ArrayList<Double>();
+		List<Double> totalCredit = new ArrayList<Double>();
+		List<String> userNames = new ArrayList<String>();
+		
+		Map<String, List> map = new HashMap<String, List>();
+		
+		List list = chartService.queryByEmp(yearMonth);
+		
+		for(Object object : list){
+			Map queryMap = (Map)object;
+			totalMoney.add((Double) queryMap.get("totalMoney"));
+			totalCredit.add((Double) queryMap.get("totalCredit"));
+			userNames.add((String) queryMap.get("userName"));
+		}
+		
+		map.put("totalMoney", totalMoney);
+		map.put("totalCredit", totalCredit);
+		map.put("userNames", userNames);
+	
+		return map;
 	}
 	
 }
