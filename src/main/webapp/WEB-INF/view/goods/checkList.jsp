@@ -35,12 +35,15 @@ $(function(){
 	table  = $("#checkGoods");
 	//绑定键盘事件
 	$('#body').keypress(function(event){
-		if(event.keyCode == 27){
+		var e = event || window.event;
+		var curKey = e.keyCode || e.which || e.charCode;
+		alert(curKey);
+		 if(curKey == 27){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
 			event.preventDefault();
-		}else if(event.keyCode== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
-			 var urlSrc =  "${ctx}/goods/check/dialog.do";
+		}else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			var urlSrc =  "${ctx}/goods/check/dialog.do";
 			 $.ligerDialog.open({
 			    height:120,
 				width: 300,
@@ -49,9 +52,11 @@ $(function(){
 				isResize: true,
 				allowClose:true,
 			 }); 
-		}
+			
+		} 
 	});
 	
+	//查询商品信息
 	$("#code").keypress(function(e){
 		var codeVal = $("#code").val();
 		if(codeVal == "") return;
@@ -59,9 +64,8 @@ $(function(){
 			asynQueryGoods();
 		}
 	});
-	
+	//计算收入和找零
 	 $("#calculateInput").keypress(function(b) {
-		 //加入时间判断 如果start end 时间在--之内 不运行  避免同一订单多次点击问题
 			if (b.keyCode == 13) {
 			 	var inputVal = $("#calculateInput").val();
 			 	if(sumMoney == 0) return;
@@ -683,7 +687,7 @@ margin-bottom: 135px;
 </div>
  
     <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
-            'F1'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
+            'F2'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
 
 </body>
