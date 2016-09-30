@@ -33,16 +33,18 @@ var isUserMember = 1; //1 不使用会员 2 使用会员
 $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
+
+	window.onhelp = function(){return false};
+	
 	//绑定键盘事件
-	$('#body').keypress(function(event){
+	$('#body').keydown(function(event){
 		var e = event || window.event;
 		var curKey = e.keyCode || e.which || e.charCode;
-		alert(curKey);
 		 if(curKey == 27){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
 			event.preventDefault();
-		}else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+		}else if(curKey== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
 			var urlSrc =  "${ctx}/goods/check/dialog.do";
 			 $.ligerDialog.open({
 			    height:120,
