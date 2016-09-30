@@ -37,9 +37,13 @@ public class GoodsLog extends BaseModel{
 	 */
 	private String receiveCredit = "0";
 	/**
-	 * 会员id
+	 * 会员号
 	 */
-	private String memberUserId;
+	private String memberNo;
+	/**
+	 * 会员剩余积分
+	 */
+	private String surplusCredit;
 	/**
 	 * 创建时间
 	 */
@@ -73,11 +77,12 @@ public class GoodsLog extends BaseModel{
 	public void setCountMoney(String countMoney) {
 		this.countMoney = countMoney;
 	}
-	public String getMemberUserId() {
-		return memberUserId;
+	
+	public String getMemberNo() {
+		return memberNo;
 	}
-	public void setMemberUserId(String memberUserId) {
-		this.memberUserId = memberUserId;
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
 	}
 	public String getCreateTime() {
 		return createTime;
@@ -114,6 +119,12 @@ public class GoodsLog extends BaseModel{
 	}
 	public void setReceiveCredit(String receiveCredit) {
 		this.receiveCredit = receiveCredit;
+	}
+	public String getSurplusCredit() {
+		return surplusCredit;
+	}
+	public void setSurplusCredit(String surplusCredit) {
+		this.surplusCredit = surplusCredit;
 	}
 	
 	

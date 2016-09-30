@@ -16,7 +16,8 @@
 	<property name="receiveMoney" column="g_receive_money" type="string"/>
 	<property name="receiveCredit" column="g_receive_credit" type="string"/>
 	<property name="changeMoney" column="g_change_money" type="string"/>
-	<property name="memberUserId" column="g_member_user_id" type="string"/>
+	<property name="memberNo" column="g_member_no" type="string"/>
+	<property name="surplusCredit" column="g_surplus_credit" type="string"/>
 	<property name="createTime" column="g_create_time" type="string"/>
 	<property name="createUserId" column="g_create_user_id" type="string"/>
   </class>

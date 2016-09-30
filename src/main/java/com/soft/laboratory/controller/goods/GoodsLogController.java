@@ -12,6 +12,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,12 +24,13 @@ import com.soft.core.syscontext.SystemContext;
 import com.soft.core.util.DateFormatUtil;
 import com.soft.core.util.PrintUtil;
 import com.soft.core.util.RequestUtil;
+import com.soft.core.util.StringUtil;
 import com.soft.laboratory.model.goods.GoodsInfo;
 import com.soft.laboratory.model.goods.GoodsLog;
+import com.soft.laboratory.model.user.SysMember;
 import com.soft.laboratory.model.user.SysUser;
 import com.soft.laboratory.service.goods.GoodsLogService;
-
-import net.sf.json.JSONArray;
+import com.soft.laboratory.service.user.SysMemberService;
 @Controller
 @RequestMapping({ "/goods/goodsLog" })
 public class GoodsLogController extends GenericController {
@@ -35,7 +38,8 @@ public class GoodsLogController extends GenericController {
 	@Resource
 	private GoodsLogService goodsLogService;
 	
-	
+	@Resource
+	private SysMemberService memberService;
 	/**
 	 * 保存，更新商品
 	 * @param request
@@ -50,13 +54,37 @@ public class GoodsLogController extends GenericController {
 		String receiveMoney = request.getParameter("receiveMoney");//收入金额
 		String changeMoney = request.getParameter("changeMoney");//找零金额
 		String receiveCredit = request.getParameter("receiveCredit");//收入积分
+		String memberNo = request.getParameter("memberNo");//会员号
+		String isUserMember = request.getParameter("isUserMember");
 		String[] goodsInfo = RequestUtil.getStringAryByStr(request, "goodsInfo");//商品信息
+		
+		System.out.println(goodsInfo.toString());
 		
 		SysUser loginUser =SystemContext.getCurrentUser(request);
 		String userId = loginUser.getId();
 		List<GoodsInfo> list = new ArrayList<GoodsInfo>();
 		GoodsLog log = new GoodsLog();
+		Double surplusCredit = 0D;//剩余积分
 		try{
+			if(StringUtil.isNotEmpty(memberNo)){
+				SysMember sysMember =  memberService.getByNos(memberNo);
+				Double memCredit = sysMember.getValueMnu();
+				surplusCredit = memCredit;//先把会员积分设置为原有积分
+				//如果是2 设置会员的剩余积分
+				if("2".equals(isUserMember)){
+					//如果收入积分不为空 判断 收入积分是否大于总积分 如果小于 就需要使用会员积分继续减去
+					if(StringUtil.isNotEmpty(receiveCredit)  && !"0".equals(receiveCredit)){
+						if((Double.valueOf(receiveCredit) -  Double.valueOf(countCredit)) < 0 ){
+							surplusCredit = memCredit - Double.valueOf(countCredit) + Double.valueOf(receiveCredit);	
+						}
+					}else{//会员积分直接减去总积分
+						surplusCredit = memCredit - Double.valueOf(countCredit);
+					}
+					sysMember.setValueMnu(surplusCredit);
+					memberService.update(sysMember);
+				}
+			}
+			
 			
 			log.setCreateTime(DateFormatUtil.getNowByString(""));
 			log.setCreateUserId(userId);
@@ -66,6 +94,8 @@ public class GoodsLogController extends GenericController {
 			log.setReceiveMoney(receiveMoney);
 			log.setReceiveCredit(receiveCredit);
 			log.setChangeMoney(changeMoney);
+			log.setMemberNo(memberNo);//
+			log.setSurplusCredit(surplusCredit.toString());
 			int saleNum =0;
 			
 			for(String str : goodsInfo){

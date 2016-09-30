@@ -14,16 +14,21 @@ import org.springframework.web.servlet.ModelAndView;
 import com.soft.core.controller.GenericController;
 import com.soft.core.syscontext.Const;
 import com.soft.core.syscontext.SystemContext;
+import com.soft.core.util.StringUtil;
 import com.soft.laboratory.model.goods.Goods;
+import com.soft.laboratory.model.user.SysMember;
 import com.soft.laboratory.model.user.SysUser;
-import com.soft.laboratory.service.goods.GoodsLogService;
 import com.soft.laboratory.service.goods.GoodsService;
+import com.soft.laboratory.service.user.SysMemberService;
 @Controller
 @RequestMapping({ "/goods/check" })
 public class GoodsCheckController extends GenericController {
 	
 	@Resource
 	private GoodsService goodsService;
+	
+	@Resource
+	private SysMemberService memberService;
 	
 	
 	/**
@@ -47,10 +52,11 @@ public class GoodsCheckController extends GenericController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping({ "getByCode" })
-	@ResponseBody
 	public void getByCode(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String code = request.getParameter("code");
+		if(StringUtil.isEmpty(code))
+			return;
 		Goods goods = goodsService.getByCode(code);
 		if(null == goods){
 			response.getWriter().print("");
@@ -91,6 +97,35 @@ public class GoodsCheckController extends GenericController {
 		checkGoods.setUserId(goods.getUser().getId());
 		checkGoods.setUserName(goods.getUser().getName());
 		return checkGoods;
+	}
+	
+	
+	/**
+	 * 输入会员框
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping({ "dialog" })
+	public ModelAndView Dialog(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		ModelAndView mv= getAutoView(request);
+		return mv;		
+	}
+	
+	/**
+	 * 查找会员
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping({ "getMember" })
+	@ResponseBody
+	public SysMember getMember(HttpServletRequest request,HttpServletResponse response)throws Exception {
+		String phone = request.getParameter("memberPhone");
+		SysMember sysMember = memberService.getByPhone(phone.trim());
+		return sysMember;
 	}
 	
 }

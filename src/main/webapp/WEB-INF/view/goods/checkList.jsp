@@ -28,6 +28,8 @@ var changeMoney = 0;//找零金额
 
 var receiveCredit = 0;//收入积分
 
+var isUserMember = 1; //1 不使用会员 2 使用会员
+
 $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
@@ -37,10 +39,22 @@ $(function(){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
 			event.preventDefault();
+		}else if(event.keyCode== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			 var urlSrc =  "${ctx}/goods/check/dialog.do";
+			 $.ligerDialog.open({
+			    height:120,
+				width: 300,
+				title : '会员登录',
+				url: urlSrc, 
+				isResize: true,
+				allowClose:true,
+			 }); 
 		}
 	});
 	
 	$("#code").keypress(function(e){
+		var codeVal = $("#code").val();
+		if(codeVal == "") return;
 		if(e.keyCode == 13){
 			asynQueryGoods();
 		}
@@ -108,7 +122,7 @@ function asynQueryGoods(){
 			//设置总值
 			if(sumMoney != totalMoney){
 				sumMoney = totalMoney;
-				sumCredit = totalCredit;
+				//sumCredit = totalCredit;
 			}
 			
 			
@@ -389,7 +403,8 @@ function asynQueryGoods(){
 		}
 			
 	 	if(sumMoney > inputVal){
-			$.ligerDialog.warn("金额数小于结账总金额数！");
+			$.ligerDialog.warn("收入金额数小于结账总金额数！");
+			$("#calculateOutput").text("");
 		}else{
 			$("#calculateOutput").text(inputVal*1 - sumMoney*1);
 		} 
@@ -412,26 +427,67 @@ function asynQueryGoods(){
 	//获取结账的收入金额，积分和找零
 	 receiveMoney = $("#calculateInput").val();
 	 changeMoney =  $("#calculateOutput").text();
-	 receiveCredit = $("#calculateCreditInput").val();
-	 
-	 
+	 receiveCredit = $("#calculateCreditInput").val();	 
  }
  //向后台发送日志请求
  function addGoodsLog(){
-	$.post("${ctx}/goods/goodsLog/save.do",{goodsInfo:goodsStr.toString(),checkType:checkType,countMoney:sumMoney,countCredit:sumCredit,receiveMoney:receiveMoney,changeMoney:changeMoney,receiveCredit:receiveCredit},function(result){
+	 var memberNo = $("#memberNo").text();
+	$.post("${ctx}/goods/goodsLog/save.do",{goodsInfo:goodsStr.toString(),checkType:checkType,countMoney:sumMoney,countCredit:sumCredit,receiveMoney:receiveMoney,changeMoney:changeMoney,receiveCredit:receiveCredit,memberNo:memberNo,isUserMember:isUserMember},function(result){
 		//还原数组为空
 		goodsStr = [];
 	});
  }
  //确认按钮操作  
  function checkOutGoods(){
+	 	
+	 
+	
+	 
 	   //进行商品信息后台保存操作 并还原数组
 		addToGoodsStr();
+		 
+		 
+	   //判断有无商品商品
+	   if(goodsStr.length==0){
+		  return;
+	   } 
+	   //判断收入金额
+	   var inputVal = $("#calculateInput").val();
+	   if(inputVal == ""){
+		   inputVal = 0;
+		}
+	   if(sumMoney > inputVal){
+			$.ligerDialog.warn("收入金额数小于结账总金额数！");
+			return;
+		}
 	   
-	   if(receiveCredit < sumCredit){
-		   $.ligerDialog.warn("收入积分小于总积分！");
-		   return;
-	   }
+	   //判断是否使用会员
+	   if($("#useMember").attr("checked")){//使用
+		   if($("#memberNo").text() == ''){
+			   $.ligerDialog.warn("没有会员登录！");
+			   return
+		   }
+		   //判断会员积分
+		  var  memberCredit = $("#memberCredit").text(); 
+		   if(memberCredit < (sumCredit - receiveCredit)){
+			   $.ligerDialog.warn("会员积分不足！");
+			   return;
+		   }
+		   //设置使用会员
+		   isUserMember = 2;
+		   
+		}else{//不使用
+			//判断收入积分
+			   if(receiveCredit < sumCredit){
+				   $.ligerDialog.warn("收入积分小于总积分！");
+				   return;
+			   }
+		}
+	   //判断结束
+	   
+	  // alert(goodsStr);
+	   
+	   //增加商品到日志记录
 		addGoodsLog();
 		
 		//延迟执行函数
@@ -445,6 +501,19 @@ function asynQueryGoods(){
 		//return false;
 	event.preventDefault();
  }
+ 
+ //子页面弹出框
+ function dialogWarn(infor){
+	 $.ligerDialog.warn(infor);
+ }
+ //子页面回调获取会员信息
+ function callBackMember(member){
+	$("#memberName").text(member.name);
+	$("#memberCredit").text(member.valueMnu);
+	$("#memberNo").text(member.memberNo);
+	$("#useMember").attr("checked",'checked');//登录后会自动选择使用积分
+ }
+ 
 </script>
 <style type="text/css">
 .btn_payfor {
@@ -569,6 +638,11 @@ margin-bottom: 135px;
 <fieldset class="fieldset">
 	<legend class="legend">商品查询</legend>
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
+	<tr>	
+		<td align="center"><div style='font-weight:bold;display:inline;'>会员姓名：</div><div id="memberName" style='font-weight:bold;display:inline;'></div></td>
+		<td align="center"><div style='font-weight:bold;display:inline;'>会员积分：</div><div id="memberCredit" style='font-weight:bold;display:inline;'></div></td>
+		<td align="center"><div style='font-weight:bold;display:inline;'>会员号：</div><div id="memberNo" style='font-weight:bold;display:inline;'></div></td>
+	</tr>
 		<tr>
 			<td width="15%" align="right">商品条码：</td>
 			<td width="25%" align="left">
@@ -604,10 +678,12 @@ margin-bottom: 135px;
  	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div><div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
  	</div>
  </div>  
-<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' /></div>
+<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' />
+	<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
+</div>
  
     <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
-             Esc键清空页面所有数据，Enter键确认输入
+            'F2'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
 
 </body>
