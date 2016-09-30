@@ -33,16 +33,18 @@ var isUserMember = 1; //1 不使用会员 2 使用会员
 $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
+
+	window.onhelp = function(){return false};
+	
 	//绑定键盘事件
-	$('#body').keypress(function(event){
+	$('#body').keydown(function(event){
 		var e = event || window.event;
 		var curKey = e.keyCode || e.which || e.charCode;
-		alert(curKey);
 		 if(curKey == 27){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
 			event.preventDefault();
-		}else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+		}else if(curKey== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
 			var urlSrc =  "${ctx}/goods/check/dialog.do";
 			 $.ligerDialog.open({
 			    height:120,
@@ -559,6 +561,7 @@ bottom:70px;
 right:0;
 font-size: 16px;
  padding-top:15px; 
+ padding-left: 80px;
 
 
 }
@@ -572,6 +575,7 @@ position:fixed;
 bottom:0;
 right:0;
 font-size: 16px;
+padding-left: 80px;
 }
 .queren{
 background-color:#D1D1D1;
@@ -603,19 +607,20 @@ height:70px;
 position:fixed;
 bottom:0;
 left:0;
-font-size: 20px;
+font-size: 25px;
 padding-left:30px;
 }
 
 #countTypeDiv{
 background-color:#D1D1D1;
-width:66%;
+width:50%;
 height:135px;
 position:fixed;
 bottom:0;
 left:0;
 font-size: 16px;
 padding-top:16px;
+padding-right:180px;
 }
 body, html {
     height: 100%;
@@ -686,7 +691,7 @@ margin-bottom: 135px;
 	<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
 </div>
  
-    <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
+    <div style="height:33px;width:80%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
             'F2'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
 
