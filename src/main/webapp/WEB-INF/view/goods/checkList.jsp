@@ -39,7 +39,7 @@ $(function(){
 			window.location.href = "${ctx}/goods/check/list.do";
 			//return false;
 			event.preventDefault();
-		}else if(event.keyCode== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+		}else if(event.keyCode== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
 			 var urlSrc =  "${ctx}/goods/check/dialog.do";
 			 $.ligerDialog.open({
 			    height:120,
@@ -683,7 +683,7 @@ margin-bottom: 135px;
 </div>
  
     <div style="height:33px;width:70%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
-            'F2'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
+            'F1'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
 
 </body>
