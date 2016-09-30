@@ -84,6 +84,46 @@ public class SysMemberController extends GenericController{
 		addMessage(message, request);
 		response.sendRedirect(preUrl);
 	}
+	/**
+	 * 通过会员号得到会员
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping({ "getByNo" })
+	public void getByNo(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String number = request.getParameter("number");
+		SysMember member = memberService.getByNos(number);
+		String msg = null;
+		if(null == member){
+			msg = "notExit";
+		}else{
+			msg = "exit";
+		}
+		response.getWriter().print(msg);
+	}
+	
+	
+	/**
+	 * 通过电话号号得到会员
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping({ "getByPhone" })
+	public void getByPhone(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String phone = request.getParameter("phone");
+		SysMember member = memberService.getByPhone(phone);
+		String msg = null;
+		if(null == member){
+			msg = "notExit";
+		}else{
+			msg = "exit";
+		}
+		response.getWriter().print(msg);
+	}
+			
+	
 	
 	/**
 	 * 得到用户列表

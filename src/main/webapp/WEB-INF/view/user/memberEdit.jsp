@@ -23,6 +23,32 @@ $(function(){
 			valueMnu:{number:"请输入正确数字"},
 		}
 	});
+	 
+	 
+	 //会员号验证
+	 $("#memberNo").change(function(){
+		 var number = $("#memberNo").val();
+		 if("" == number) return;
+		 $.post('${ctx}/user/member/getByNo.do',{number:number},function(data){
+			if("exit" == data){
+				$.ligerDialog.warn("会员编号已存在，请重新输入！");
+				$("#memberNo").val('');
+			}
+		 });
+	 });
+	 
+	 //电话号验证
+	 $("#phone").change(function(){
+		 var phone = $("#phone").val();
+		 if("" == phone) return;
+		 $.post('${ctx}/user/member/getByPhone.do',{phone:phone},function(data){
+			 if("exit" == data){
+					$.ligerDialog.warn("手机号已存在，请重新输入！");
+					$("#phone").val('');
+				}
+		 });
+	 });
+	 
 });
 </script>
 
