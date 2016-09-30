@@ -45,11 +45,13 @@ $(function(){
 			//return false;
 			event.preventDefault();
 		}else if(curKey== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			$.ligerDialog.close();//先关闭弹出框  放置多开
 			var urlSrc =  "${ctx}/goods/check/dialog.do";
 			 $.ligerDialog.open({
+				 id:'memberDialog',
 			    height:120,
 				width: 300,
-				title : '会员登录',
+				title : '会员登录(手机号登录)',
 				url: urlSrc, 
 				isResize: true,
 				allowClose:true,
@@ -59,16 +61,20 @@ $(function(){
 	});
 	
 	//查询商品信息
-	$("#code").keypress(function(e){
+	$("#code").keypress(function(event){
 		var codeVal = $("#code").val();
 		if(codeVal == "") return;
-		if(e.keyCode == 13){
+		var e = event || window.event;
+		var curKey = e.keyCode || e.which || e.charCode;
+		if(curKey == 13){
 			asynQueryGoods();
 		}
 	});
 	//计算收入和找零
-	 $("#calculateInput").keypress(function(b) {
-			if (b.keyCode == 13) {
+	 $("#calculateInput").keydown(function(event) {
+		    var e = event || window.event;
+			var curKey = e.keyCode || e.which || e.charCode;
+			if(curKey == 13){
 			 	var inputVal = $("#calculateInput").val();
 			 	if(sumMoney == 0) return;
 			 	if(sumMoney > inputVal){
@@ -135,6 +141,9 @@ function asynQueryGoods(){
 			if(isExist == true){
 				//结算行
 				addCountRow(totalMoney,0);
+				//商品全部以现金结账
+	            cashPayfor();
+				
 				return;
 			}
 				
@@ -157,6 +166,8 @@ function asynQueryGoods(){
            	    $(document).scrollTop(hei);
              }
              
+             //商品全部以现金结账
+             cashPayfor();
              
 		},
 
@@ -491,7 +502,7 @@ function asynQueryGoods(){
 		}
 	   //判断结束
 	   
-	  // alert(goodsStr);
+	   //alert(goodsStr);
 	   
 	   //增加商品到日志记录
 		addGoodsLog();
@@ -692,7 +703,7 @@ margin-bottom: 135px;
 </div>
  
     <div style="height:33px;width:80%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
-            'F2'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
+            'F1'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
 
 </body>
