@@ -37,7 +37,7 @@
             
               <tr>
                 <td align="right" class="tabRight">库存:</td>
-                <td align="left" class="left">【${goods.sum}</td>               
+                <td align="left" class="left">${goods.sum}</td>               
             </tr> 
              <tr>
                 <td align="right" class="tabRight">销售价（现金）:</td>
