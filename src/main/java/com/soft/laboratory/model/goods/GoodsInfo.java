@@ -6,6 +6,7 @@ public class GoodsInfo  extends BaseModel{
 
 	private static final long serialVersionUID = 1L;
 	
+	private String id;
 	/**
 	 * 条码
 	 */
@@ -29,10 +30,44 @@ public class GoodsInfo  extends BaseModel{
 	private String payType;
 	
 	/**
-	 * 数量
+	 * 销售数量
 	 */
 	private  String number;
 	
+	/**
+	 * 销售时间
+	 */
+	private String crateDate;
+	
+	/**
+	 * ID销售
+	 */
+	private String logId;
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getLogId() {
+		return logId;
+	}
+
+	public void setLogId(String logId) {
+		this.logId = logId;
+	}
+
+	public String getCrateDate() {
+		return crateDate;
+	}
+
+	public void setCrateDate(String crateDate) {
+		this.crateDate = crateDate;
+	}
 
 	public String getCode() {
 		return code;

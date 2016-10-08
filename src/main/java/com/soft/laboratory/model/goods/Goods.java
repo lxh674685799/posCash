@@ -70,6 +70,18 @@ public class Goods extends BaseModel{
 	 */
 	private String remark;
 	
+	/**
+	 * 库存
+	 */
+	private Integer sum;
+	
+	
+	public Integer getSum() {
+		return sum;
+	}
+	public void setSum(Integer sum) {
+		this.sum = sum;
+	}
 	public String getId() {
 		return id;
 	}

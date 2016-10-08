@@ -64,11 +64,16 @@ function toAdd(){
 		<display:column title="销售价"  style="text-align:right;">
 				${f.inPrice}元
 		</display:column>
+		<display:column title="库存"  style="text-align:right;">
+				${f.sum}件
+		</display:column>
 		 <%-- <display:column title="库存" property="inventory" style="text-align:right;"></display:column>  --%>
 		<display:column title="操作">
 			<a href="${ctx}/goods/goods/edit.do?id=${f.id}">修改</a>
 			<a href="${ctx}/goods/goods/del.do?id=${f.id}">删除</a>
 			<a href="${ctx}/goods/goods/get.do?id=${f.id}">详情</a>
+			<a href="${ctx}/goods/goods/toUpdateSum.do?id=${f.id}">入库</a>
+			
 		</display:column>
 	</display:table>	
 	</form>	

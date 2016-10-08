@@ -43,6 +43,17 @@
         			+ ",status=no,toolbar=no,menubar=no,location=no,resizable=1,scrollbars=1";
         	window.open("${ctx}/goods/check/list.do", "", e, true);
         	};
+        	
+        	function staticList(){
+           		var c = screen.availHeight - 35;
+            	var a = screen.availWidth - 5;
+            	var e = "top=0,left=0,height="
+            			+ c
+            			+ ",width="
+            			+ a
+            			+ ",status=no,toolbar=no,menubar=no,location=no,resizable=1,scrollbars=1";
+            	window.open("${ctx}/goods/goodsLog/statis.do", "", e, true);
+            	};
     </script>
 <style>
 
@@ -74,6 +85,21 @@ left:20px;
   position:relative;
 left:40px; 	 
 }
+
+#static {
+    line-height:30px;
+ background-color:#3873F2;
+    width:120px;
+    float:left;
+    padding:40px;
+	 height:80px;
+	color: #ffffff;
+	 text-align: center; 
+	font-size: 45px;
+  font-weight: bold;	
+  position:relative;
+left:60px; 	 
+}
 </style>
 
 </head>
@@ -86,6 +112,7 @@ left:40px;
 <div id="section" onclick="checkList()">
  收银</br></br>结账
 </div>
+
 </br>
 </br></br>
 </br></br>

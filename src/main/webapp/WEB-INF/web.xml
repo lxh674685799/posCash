@@ -106,8 +106,8 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
 	
-	<!-- session 超时时间-->
-	 <session-timeout> 30</session-timeout>
+	<!-- session 超时时间
+	 <session-timeout> 30</session-timeout>-->
 	
    <!--Log4j日志监听器
 	<listener>

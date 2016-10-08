@@ -56,7 +56,28 @@ $(function(){
 				isResize: true,
 				allowClose:true,
 			 }); 
+		} else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			cashPayfor();
+		} else if(curKey== 114){//F2值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			numericalPayfor();
+		} else if(curKey== 115){//F3值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			admixPayfor();
+		} else if(curKey== 116){//F4值112 赠送
+			  //增加商品到日志记录
+			  //进行商品信息后台保存操作 并还原数组
+			addToGoodsStr();
+			 	 
+		   //判断有无商品商品
+		   if(goodsStr.length==0){
+			  return;
+		   } 
+			  
+			checkType = 4;
+
+			addGoodsLog();
 			
+			//延迟执行函数
+			setTimeout("reloadInfor()",200);
 		} 
 	});
 	
@@ -70,6 +91,8 @@ $(function(){
 			asynQueryGoods();
 		}
 	});
+	
+	
 	//计算收入和找零
 	 $("#calculateInput").keydown(function(event) {
 		    var e = event || window.event;
@@ -81,6 +104,21 @@ $(function(){
 					$.ligerDialog.warn("金额数小于结账总金额数！");
 				}else{
 					$("#calculateOutput").text(inputVal*1 - sumMoney*1);
+				} 
+			} 
+		});
+
+
+	 $("#calculateCreditInput").keydown(function(event) {
+		    var e = event || window.event;
+			var curKey = e.keyCode || e.which || e.charCode;
+			if(curKey == 13){
+			 	var inputVal = $("#calculateCreditInput").val();
+			 	if(sumCredit == 0) return;
+			 	if(sumCredit > inputVal){
+					$.ligerDialog.warn("点券数小于结账总点券数！");
+				}else{
+					$("#calculateOutput1").text(inputVal*1 - sumCredit*1);
 				} 
 			} 
 		});
@@ -106,6 +144,8 @@ function asynQueryGoods(){
 				$.ligerDialog.warn("请输入正确的商品条码！");
 				return;
 			}
+			
+			 $("#code").val("");
 			//获取商品信息
 			var name = data.name;//商品名称
 			var code = data.code;//商品编码
@@ -150,7 +190,7 @@ function asynQueryGoods(){
 				
 			 var row = $("<tr id='"+code+"'></tr>");
 			//td 最后隐藏了 商品的价格信息可取
-			 var td = $("<td style='text-align: center;' name='code'> "+code+"</td><td name='goodsName'>"+ name+"</td><td name='money'>"+ money+"</td><td name='credit'>"+0+"</td><td name='numberTd'> <img src='${ctx}/resources/images/down.png' onclick='reduceNumber(this)' title='减少' width='14px'/>&nbsp;<input name='number' readonly='true' style='width:20px' value='1' />&nbsp;<img src='${ctx}/resources/images/add.png' onclick='addNumber(this)' title='增加'  width='13px'/></td><td name='operate' style='width:20%'><img src='${ctx}/resources/images/remove.png' onclick='removeSelf(this)' title='移除' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select onchange='payTypeChange(this)' name='payType'><option value='1'>现金付款</option><option value='2'>积分付款</option><option value='3'>现金和积分付款</option></select></td><td class='moneyCre' name='moneyCre' style='display:none;'>"+moneyCre+"</td><td class='creditMon' name='creditMon' style='display:none;'>"+creditMon+"</td><td name='moneyHid' style='display:none;'>"+money+"</td><td  name='creditHid' style='display:none;'>"+credit+"</td>");
+			 var td = $("<td style='text-align: center;' name='code'> "+code+"</td><td name='goodsName'>"+ name+"</td><td name='money'>"+ money+"</td><td name='credit'>"+0+"</td><td name='numberTd'> <img src='${ctx}/resources/images/down.png' onclick='reduceNumber(this)' title='减少' width='14px'/>&nbsp;<input name='number' readonly='true' style='width:20px' value='1' />&nbsp;<img src='${ctx}/resources/images/add.png' onclick='addNumber(this)' title='增加'  width='13px'/></td><td name='operate' style='width:20%'><img src='${ctx}/resources/images/remove.png' onclick='removeSelf(this)' title='移除' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='moneyCre' name='moneyCre' style='display:none;'>"+moneyCre+"</td><td class='creditMon' name='creditMon' style='display:none;'>"+creditMon+"</td><td name='moneyHid' style='display:none;'>"+money+"</td><td  name='creditHid' style='display:none;'>"+credit+"</td>");
 			 row.append(td);
 			 table.append(row);
 			//增加商品信息结束
@@ -168,7 +208,6 @@ function asynQueryGoods(){
              
              //商品全部以现金结账
              cashPayfor();
-             
 		},
 
 	});
@@ -359,7 +398,16 @@ function asynQueryGoods(){
 	checkType = 1;
 	
 	//结账运算
-	checkOutput();
+	//checkOutput();
+	
+	
+ 	 $("#calculateCreditInput").val("0");
+
+ 	$("#calculateInput").val("0");
+
+	$("#calculateOutput").text("0");
+
+	$("#calculateOutput1").text("0");
  	
  }
  //积分结账
@@ -382,7 +430,15 @@ function asynQueryGoods(){
 	//设置结账方式
 	checkType = 2;
 	//结账运算
-	checkOutput();
+	///checkOutput();
+	
+	 $("#calculateCreditInput").val("0");
+
+	 	$("#calculateInput").val("0");
+
+		$("#calculateOutput").text("0");
+
+		$("#calculateOutput1").text("0");
  	
  }
  //混合结账 现金和积分
@@ -408,7 +464,15 @@ function asynQueryGoods(){
 	checkType = 3;
 	
 	//结账运算
-	checkOutput();
+	//checkOutput();
+	
+	 $("#calculateCreditInput").val("0");
+
+	 	$("#calculateInput").val("0");
+
+		$("#calculateOutput").text("0");
+
+		$("#calculateOutput1").text("0");
  	
  }
  //进行运算收入金额和找零
@@ -426,6 +490,7 @@ function asynQueryGoods(){
 			$("#calculateOutput").text(inputVal*1 - sumMoney*1);
 		} 
  }
+ 
  //获取商品信息放在数组中 同时获取收入金额和找零
  function  addToGoodsStr(){
 	 //获取商品信息
@@ -454,16 +519,83 @@ function asynQueryGoods(){
 		goodsStr = [];
 	});
  }
+
+ 
+ function viewToWord() {
+	          //当前时间
+	          var Time;
+	          var today = new Date();
+	          Time = today.toLocaleString();
+	          
+	          try {  
+	             // 创建ActiveXObject对象  
+	              wdapp = new ActiveXObject("Word.Application");  
+	         }  
+	         catch (e) {  
+	             console.log("无法调用Office对象，！", e)  
+	             wdapp = null;  
+	             return;  
+	         }
+	         wdapp.Documents.Open("f:\\PrinterTemplate1.doc"); //打开本地(客户端)word模板
+	         wddoc = wdapp.ActiveDocument;  
+	         //添加表格
+	         var myTable = wddoc.Tables.Add (wddoc.Bookmarks("orderChart").Range,3,4);//(赋值区域,行数,列数)
+	         //隐藏边框
+	         var table=wdapp.ActiveDocument.Tables(1);
+	         table.Borders(-1).LineStyle=0;
+	         table.Borders(-2).LineStyle=0;
+	         table.Borders(-3).LineStyle=0;
+         	 table.Borders(-4).LineStyle=0;
+	         table.Borders(-5).LineStyle=0;
+	         table.Borders(-6).LineStyle=0;
+	         for(i=1;i<=3;i++){//行
+	             //第一列
+	             with (myTable.Cell(i,1).Range){
+	                 font.Size = 8;//调整字体大小
+	                 InsertAfter("博客园"+i);//插入的内容
+	             }
+	             //第二列
+	             with(myTable.Cell(i,2).Range){
+	                 font.Size = 8;
+	                 InsertAfter(i);
+	                 ParagraphFormat.Alignment=1;//表格内容对齐:0-左对齐 1-居中 2-右对齐
+	             }
+	             //第三列
+             with(myTable.Cell(i,3).Range){
+	                 font.Size = 8;
+	                 InsertAfter("无价");
+	                 ParagraphFormat.Alignment=2;
+	             }
+             with(myTable.Cell(i,4).Range){
+                 font.Size = 8;
+                 InsertAfter("无价");
+                 ParagraphFormat.Alignment=2;
+             }
+	         }
+	         wddoc.saveAs("f:\\PrinterTemp_cnblogs.doc"); //保存临时文件word
+	         wddoc.Bookmarks("totalNum").Range.Text = "总个数";
+	         wddoc.Bookmarks("total_credit").Range.Text = "应收卷";
+	         wddoc.Bookmarks("totalSum").Range.Text = "应收钱";
+
+	         wddoc.Bookmarks("practical").Range.Text = "实收钱";
+	         wddoc.Bookmarks("sale_credit").Range.Text = "实收卷";
+
+	         wddoc.Bookmarks("changes").Range.Text = "找零";
+	         wddoc.Bookmarks("cashier").Range.Text = "收银员";
+
+	         wddoc.Bookmarks("createTime").Range.Text = Time; 
+	         wdapp.visible = false; //word模板是否可见  
+         	 wdapp.Application.Printout(); //调用自动打印功能  
+        	 wdapp.quit();
+	         wdapp = null;  
+	     }
+ 
  //确认按钮操作  
  function checkOutGoods(){
-	 	
-	 
-	
-	 
+
 	   //进行商品信息后台保存操作 并还原数组
 		addToGoodsStr();
-		 
-		 
+		 	 
 	   //判断有无商品商品
 	   if(goodsStr.length==0){
 		  return;
@@ -534,43 +666,42 @@ function asynQueryGoods(){
 </script>
 <style type="text/css">
 .btn_payfor {
-  /*  background: rgba(0, 0, 0, 0) url("${ctx}/resources/images/blue-big.jpg") no-repeat scroll 0 0; */
   background: #3873F2  no-repeat scroll 0 0;
     border: medium none;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: bold;
     height: 24px;
     line-height: 24px;
-    margin-right: 15px;
+    margin-right: 10px;
     text-align: center;
     vertical-align: middle;
-    width: 82px;
+    width: 60px;
 }
 
 .btn_payforMix {
    background: #3873F2  no-repeat scroll 0 0;
     border: medium none;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 10px;
     font-weight: bold;
     height: 24px;
     line-height: 24px;
-    margin-right: 15px;
+    margin-right: 10px;
     text-align: center;
     vertical-align: middle;
-    width: 100px;
+    width: 60px;
 }
 #calculateDiv{
  margin-right:150px; 
 *margin-right:150px; 
 background-color:#D1D1D1;
-width:350px;
+width:40%;
 height:66px;
 position:fixed;
 bottom:70px;
 right:0;
-font-size: 16px;
+font-size: 12px;
  padding-top:15px; 
  padding-left: 80px;
 
@@ -580,17 +711,16 @@ font-size: 16px;
 margin-right:150px; 
 *margin-right:150px; 
 background-color:#D1D1D1;
-width:350px;
+width:40%;
 height:80px;
 position:fixed;
 bottom:0;
 right:0;
-font-size: 16px;
+font-size: 12px;
 padding-left: 80px;
 }
 .queren{
 background-color:#D1D1D1;
-width:150px;
 height:151px;
 position:fixed;
 bottom:0;
@@ -618,7 +748,7 @@ height:70px;
 position:fixed;
 bottom:0;
 left:0;
-font-size: 25px;
+font-size: 12px;
 padding-left:30px;
 }
 
@@ -657,6 +787,7 @@ margin-bottom: 135px;
 <div class='top' id="top">
 <fieldset class="fieldset">
 	<legend class="legend">商品查询</legend>
+	
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
 	<tr>	
 		<td align="center"><div style='font-weight:bold;display:inline;'>会员姓名：</div><div id="memberName" style='font-weight:bold;display:inline;'></div></td>
@@ -687,7 +818,8 @@ margin-bottom: 135px;
 	</thead>
 	</table>
    <div id="countTypeDiv">
- 	<table id='payForTable' border='0' cellpadding='2' cellspacing='1' width='100%' ><tr><td align='center'><input type='button' value='现金结账' class='btn_payfor'  onclick='cashPayfor()'/></td> <td  align='center'><input type='button' value='积分结账' class='btn_payfor' onclick='numericalPayfor()' /></td> <td align='center'><input type='button' value='现金和积分结账' class='btn_payforMix' onclick='admixPayfor()' /></td> </tr></table>
+ 		<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
+
  </div>	 
   <div id='countDiv'>
   		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
@@ -695,16 +827,27 @@ margin-bottom: 135px;
   </div> 
    <div class="queren"><div class='btn_queren'onclick="checkOutGoods()">确认</div></div>
    <div id='calculateDiv'>
- 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div><input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div><div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div><div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
+ 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div>
+ 	<input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div>
+ 	
+ 	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
+ 	<div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
  	</div>
  </div>  
-<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div><input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' />
-	<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
+<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div>
+
+<input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' />
+
+	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
+ 	<div id='calculateOutput1' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
+ 	</div>
+
+
 </div>
  
-    <div style="height:33px;width:80%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 16px;">
-            'F1'会员登录，'Esc'清空页面所有数据，'Enter'确认输入
+    <div style="height:33px;width:80%;background-color: #D1D1D1;position:fixed;bottom:0;text-align:center;font-size: 10px;">
+            'F1'会员登录， 'F2'现金结账， 'F3'积分结账， 'F4'现金积分， 'F5'赠送，'Esc'清空页面所有数据，'Enter'确认输入
    </div> 
-
+   
 </body>
 </html>

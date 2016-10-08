@@ -21,7 +21,8 @@ $(function(){
 			credit:{required:true,number:true},
 			money:{required:true,number:true},
 			moneyCre:{required:true,number:true},
-			creditMon:{required:true,number:true}
+			creditMon:{required:true,number:true},
+			sum:{required:true,number:true}
 		},
 		messages:{
 			name:{required:"请输入商品名称！"},
@@ -32,7 +33,8 @@ $(function(){
 			credit:{required:"请输入销售积分！",number:"积分只能为数字！"},
 			money:{required:"请输入销售金额！",number:"金额只能为数字！"},
 			moneyCre:{required:"请输入销售金额！",number:"金额只能为数字！"},
-			creditMon:{required:"请输入销售积分！",number:"积分只能为数字！"}
+			creditMon:{required:"请输入销售积分！",number:"积分只能为数字！"},
+			sum:{required:"请输入库存数量！",number:"库存只能为数字！"}
 		}
 	});
 });
@@ -154,7 +156,14 @@ function emptyOrg(){
                 <td align="right" class="tabRight">进货价:</td>
                 <td align="left" class="left">
                 <input name="inPrice" type="text" id="inPrice" value="${goods.inPrice}" /></td>               
-            </tr> 
+            </tr>
+            
+            <tr>
+                <td align="right" class="tabRight">库存:</td>
+                <td align="left" class="left">
+                <input name="sum" type="text" id="sum" value="${goods.sum}" /></td>               
+            </tr>  
+            
             <tr>
                 <td align="center"  colspan="2"  bgcolor="#AEDCE6">销售价（现金）</td>
               </tr> 

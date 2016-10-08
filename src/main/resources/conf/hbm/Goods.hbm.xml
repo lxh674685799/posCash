@@ -23,6 +23,7 @@
 	<property name="typeId" column="g_typeId" type="string"/>
 	<property name="factoryId" column="g_factoryId" type="string"/>
 	<property name="userId" column="g_userId" type="string"/>
+	<property name="sum" column="g_sum" type="int"/>
 	
 	<many-to-one name="factory" column="g_factoryId" class="com.soft.laboratory.model.device.DeviceFactory" insert="false" update="false" lazy ="proxy" />
     <many-to-one name="type" column="g_typeId" class="com.soft.laboratory.model.device.DeviceType" insert="false" update="false" lazy ="proxy"/>

@@ -81,7 +81,7 @@ public class PrintUtil implements Printable {
 	        g2.setFont(font);// 设置字体  
 	        float heigth = font.getSize2D();// 字体高度  
 	        // 标题  
-	        g2.drawString("乐分商城", (float) x, (float) y + heigth);  
+	        g2.drawString("乐分商城", (float) x+50, (float) y + heigth);  
 	        float line = 2 * heigth;  
 	  
 	        font = new Font("宋体", Font.PLAIN, 8);  
@@ -91,16 +91,15 @@ public class PrintUtil implements Printable {
 	        // 显示收银员  
 	        g2.drawString("收银员:" + cashier, (float) x, (float) y + line);  
 	        // 显示订单号  
-//	        g2.drawString("订单号:" + orders, (float) x + 100, (float) y + line);  
 //	  
-	        line += heigth;  
+	        line += heigth+5;  
 	        // 显示标题  
-	        g2.drawString("名称", (float) x + 20, (float) y + line);  
-	        g2.drawString("单价", (float) x + 60, (float) y + line);  
-	        g2.drawString("点卷", (float) x + 85, (float) y + line);  
-	        g2.drawString("数量", (float) x + 115, (float) y + line);  
+	        g2.drawString("名称", (float) x , (float) y + line);  
+	        g2.drawString("单价", (float) x + 30, (float) y + line);  
+	        g2.drawString("点券", (float) x + 60, (float) y + line);  
+	        g2.drawString("数量", (float) x + 90, (float) y + line);  
 	        line += heigth;  
-	        g2.drawLine((int) x, (int) (y + line), (int) x + 158, (int) (y + line));  
+	        g2.drawLine((int) x, (int) (y + line), (int) x + 160, (int) (y + line));  
 	  
 	        // 第4行  
 	        line += heigth;  
@@ -108,11 +107,10 @@ public class PrintUtil implements Printable {
 	        // 显示内容  
 	        for (int i = 0; i < list.size(); i++) {  
 	  
-	        	GoodsInfo commodity = list.get(i);  
-	  
+	        	GoodsInfo commodity = list.get(i); 
 	            g2.drawString(commodity.getName(), (float) x, (float) y + line);  
 	            line += heigth;  	  
-	            g2.drawString(commodity.getMoney(), (float) x, (float) y + line);  
+	            g2.drawString(commodity.getMoney(), (float) x+30, (float) y + line);  
 	            g2.drawString(commodity.getCredit(), (float) x + 60, (float) y + line);  
 	            g2.drawString(commodity.getNumber(), (float) x + 90, (float) y + line);  
 	            line += heigth;  
@@ -120,14 +118,16 @@ public class PrintUtil implements Printable {
 	        }  
 	        line += heigth;  
 	  
-	        g2.drawLine((int) x, (int) (y + line), (int) x + 158, (int) (y + line));  
+	        g2.drawLine((int) x, (int) (y + line), (int) x + 160, (int) (y + line));  
 	        line += heigth;  
 	  
 	        g2.drawString("兑换商品数:" + sale_num + "件", (float) x, (float) y + line);  
-	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "卷", (float) x + 70, (float) y + line);  
+	        line += heigth; 
+	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "券", (float) x, (float) y + line);  
 	        line += heigth;  
-	        g2.drawString("实收:" + practical + "元，"+ sale_credit + "卷", (float) x, (float) y + line);  
-	        g2.drawString("找零:" + changes + "元", (float) x + 70, (float) y + line);  
+	        g2.drawString("实收:" + practical + "元，"+ sale_credit + "券", (float) x, (float) y + line); 
+	        line += heigth;
+	        g2.drawString("找零:" + changes + "元", (float) x, (float) y + line);  
 	        line += heigth;  
 	        g2.drawString("时间:" + Calendar.getInstance().getTime().toLocaleString(), (float) x, (float) y + line);  
 	  

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.soft.laboratory.model.goods">
+  <class name="GoodsInfo" table="l_goods_info">
+  	<!-- 配置主键 -->
+  	<id name="id" column="g_id">
+  		<!-- 主键的生成策略 -->
+  		<generator class="uuid.hex" />
+  	</id>
+	<property name="name" column="g_name" type="string"/>
+	<property name="code" column="g_code" type="string"/>
+	<property name="money" column="g_money" type="string"/>
+	<property name="payType" column="g_payType" type="string"/>
+	<property name="number" column="g_number" type="string"/>
+	<property name="crateDate" column="g_crateDate" type="string"/>
+	<property name="logId" column="g_logId" type="string"/>
+	
+  </class>
+
+</hibernate-mapping>

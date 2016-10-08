@@ -6,13 +6,12 @@ import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONArray;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +24,17 @@ import com.soft.core.util.DateFormatUtil;
 import com.soft.core.util.PrintUtil;
 import com.soft.core.util.RequestUtil;
 import com.soft.core.util.StringUtil;
+import com.soft.laboratory.model.goods.Goods;
 import com.soft.laboratory.model.goods.GoodsInfo;
 import com.soft.laboratory.model.goods.GoodsLog;
 import com.soft.laboratory.model.user.SysMember;
 import com.soft.laboratory.model.user.SysUser;
+import com.soft.laboratory.service.goods.GoodsInfoService;
 import com.soft.laboratory.service.goods.GoodsLogService;
+import com.soft.laboratory.service.goods.GoodsService;
 import com.soft.laboratory.service.user.SysMemberService;
+
+import net.sf.json.JSONArray;
 @Controller
 @RequestMapping({ "/goods/goodsLog" })
 public class GoodsLogController extends GenericController {
@@ -40,6 +44,12 @@ public class GoodsLogController extends GenericController {
 	
 	@Resource
 	private SysMemberService memberService;
+	
+	@Resource
+	private GoodsInfoService goodsInfoService;
+	
+	@Resource
+	private GoodsService goodsService;
 	/**
 	 * 保存，更新商品
 	 * @param request
@@ -112,9 +122,33 @@ public class GoodsLogController extends GenericController {
 				saleNum = saleNum + Integer.valueOf(strs[4]);
 				
 			}
+			
+			
 			String goodsInfoJson =JSONArray.fromObject(list).toString();
 			log.setGoodsInfo(goodsInfoJson);
-			goodsLogService.add(log);
+			String goodLogId =goodsLogService.add(log);
+			
+			//保存记录的信息
+			for(String str : goodsInfo){
+				GoodsInfo info = new GoodsInfo();
+				String[] strs = str.split("#");
+				info.setCode(strs[0]);
+				info.setName(strs[1]);
+				info.setMoney(strs[2]);
+				info.setCredit(strs[3]);
+				info.setNumber(strs[4]);
+				info.setPayType(checkType);
+				info.setLogId(goodLogId);
+				info.setCrateDate(DateFormatUtil.formatDate(new Date()));
+				
+				Goods goods =goodsService.getByCode(strs[0]);
+				goods.setSum(goods.getSum()-Integer.valueOf(strs[4]));
+				goodsService.update(goods);
+				
+				goodsInfoService.add(info);
+				
+			}
+			//显示商品名称   商品数量  显示数量  
 			
 			// 执行打印
 			PrintSale(log,list,loginUser,saleNum);
@@ -144,8 +178,8 @@ public class GoodsLogController extends GenericController {
   
             // 通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。  
             Paper paper = new Paper();  
-            paper.setSize(158, 30000);// 纸张大小  
-            paper.setImageableArea(0, 0, 158, 30000);// A4(595 X  
+            paper.setSize(160, 30000);// 纸张大小  
+            paper.setImageableArea(0, 0, 160, 30000);// A4(595 X  
                                                         // 842)设置打印区域，其实0，0应该是72，72，因为A4纸的默认X,Y边距是72  
             pf.setPaper(paper);  
   
@@ -193,4 +227,47 @@ public class GoodsLogController extends GenericController {
 		return mv;		
 	}
 	
+	/**
+	 *统计商品的销售量  怎么展示   商品的名称 
+	 */
+	@RequestMapping({ "statis" })
+	public ModelAndView statis(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		String goodName = request.getParameter("goodName");
+		String startTime = request.getParameter("startTime");
+		String endTime = request.getParameter("endTime");
+
+		if(goodName != null){
+			if(goodName.equals("")){
+				goodName=null;
+			}
+		}
+		if(startTime != null){
+			if(startTime.equals("")){
+				startTime=null;
+			}
+		}
+
+		if(endTime != null){
+			if(endTime.equals("")){
+				endTime=null;
+			}
+		}
+		
+		int page =1;
+		int total = 0;
+		if(request.getParameter("page")!=null){
+			page = Integer.parseInt(request.getParameter("page"));
+			total = Integer.parseInt(request.getParameter("totalCount"));
+		}else{
+			total = goodsInfoService.getTotalDiv(goodName,startTime,endTime); 
+		}	
+
+		Page pagination = new Page(page, total);
+		List list = goodsInfoService.listByPageByDiv(pagination,goodName,startTime,endTime);
+		ModelAndView mv= getAutoView(request);
+		mv.addObject("page",pagination).addObject("GoodsInfo", list).addObject("endTime", endTime).addObject("startTime", startTime).addObject("goodName", goodName);
+		return mv;		
+	}
 }

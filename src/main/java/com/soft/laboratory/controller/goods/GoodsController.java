@@ -38,7 +38,6 @@ public class GoodsController extends GenericController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping({ "list" })
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response,Goods goods) throws Exception {
@@ -62,6 +61,38 @@ public class GoodsController extends GenericController {
 		ModelAndView mv= getAutoView(request);
 		mv.addObject("page",pagination).addObject("Goods", list).addObject("goods", goods);
 		return mv;		
+	}
+	
+	@RequestMapping({ "toUpdateSum" })
+	public ModelAndView toUpdateSum(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		ModelAndView mv = getAutoView(request);
+		String id = request.getParameter("id");
+		String returnUrl = RequestUtil.getPrePage(request);
+		Goods goods = null;
+		if (id != null) {
+			goods= goodsService.getById(id);
+		}else{
+			goods= new Goods();
+		}
+		List<DeviceFactory> deviceFactorys = (List<DeviceFactory>) factoryService.listAll(new DeviceFactory());
+		return mv.addObject("returnUrl", returnUrl)
+				.addObject("goods", goods).addObject("factorys",deviceFactorys);			
+	}
+	
+	@RequestMapping({ "updateSum" })
+	public void updateSum(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String preUrl = request.getParameter("returnUrl");
+		String id = request.getParameter("id");
+		String updatesum = request.getParameter("updatesum");
+
+		Goods goods = goodsService.getById(id);
+		goods.setSum(goods.getSum()+Integer.valueOf(updatesum));
+		goodsService.update(goods);
+		ResultMessage message  = new ResultMessage(Const.MESSAGE_SUCCESS, "商品入库成功！");
+
+		addMessage(message, request);
+		response.sendRedirect(preUrl);	
 	}
 	
 	/**

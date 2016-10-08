@@ -62,6 +62,8 @@
 				<value>conf/hbm/Notice.hbm.xml</value>
 				<value>conf/hbm/Goods.hbm.xml</value>
 				<value>conf/hbm/GoodsLog.hbm.xml</value>
+				<value>conf/hbm/GoodsInfo.hbm.xml</value>
+				
 			</list>
 		</property>
 	</bean>
