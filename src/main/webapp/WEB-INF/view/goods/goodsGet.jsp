@@ -4,7 +4,6 @@
 <html>
 <head>
 <title>设备信息</title>
-
 </head>
 <body>
     <form name="form" method="post" action="save.do" id="form">
