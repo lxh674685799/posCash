@@ -140,8 +140,17 @@ function exportExcel(){
 		<display:column title="供货商"  style="text-align:right;">
 			<a href="${ctx}/device/factory/get.do?factoryId=${f.factoryId}">${f.factory.name}</a>
 		</display:column>
-		<display:column title="销售价"  style="text-align:right;">
+		<display:column title="进货价"  style="text-align:right;">
 				${f.inPrice}元
+		</display:column>
+		<display:column title="销售价(现金)"  style="text-align:right;">
+				${f.money}元
+		</display:column>
+		<display:column title="销售价(点券)"  style="text-align:right;">
+				${f.credit}券
+		</display:column>
+		<display:column title="销售价(现金+点券)"  style="text-align:right;">
+				${f.moneyCre}元 + ${f.creditMon}券
 		</display:column>
 		<display:column title="库存"  style="text-align:right;">
 				${f.sum}件
