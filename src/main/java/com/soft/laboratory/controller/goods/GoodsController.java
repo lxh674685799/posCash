@@ -1,12 +1,16 @@
 package com.soft.laboratory.controller.goods;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,6 +45,8 @@ public class GoodsController extends GenericController {
 	@RequestMapping({ "list" })
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response,Goods goods) throws Exception {
+		
+		String typeName = request.getParameter("typename");
 		SysUser loginUser =SystemContext.getCurrentUser(request);
 		String id = loginUser.getId();
 		/*if(!id.equals(Const.SYSTEM_ADMIN_ID)){
@@ -58,6 +64,7 @@ public class GoodsController extends GenericController {
 		Page pagination = new Page(page, total);
 		String order ="order by d.id desc";
 		List<Goods> list = goodsService.listByPage(pagination,goods,order);
+		goods.setTypeName(typeName);
 		ModelAndView mv= getAutoView(request);
 		mv.addObject("page",pagination).addObject("Goods", list).addObject("goods", goods);
 		return mv;		
@@ -189,4 +196,30 @@ public class GoodsController extends GenericController {
 		addMessage(message, request);
 		response.sendRedirect(preUrl);	
 	}
+	
+	
+	
+	 @RequestMapping({"excelExport"})    
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response)throws Exception {  
+		 List<Goods> list = (List<Goods>) goodsService.listAll(new Goods());
+		 final String userAgent = request.getHeader("USER-AGENT");
+		 
+        HSSFWorkbook wb = goodsService.export(list);    
+        //设置excel名称 为中文
+        String  fileName = "商品信息.xls"; 
+        String finalFileName = null;  
+        if(StringUtils.contains(userAgent, "MSIE")){//IE浏览器  
+        finalFileName = URLEncoder.encode(fileName,"UTF8");  
+	    }else if(StringUtils.contains(userAgent, "Mozilla")){//google,火狐浏览器  
+	        finalFileName = new String(fileName.getBytes(), "ISO8859-1");  
+	    }else{  
+	        finalFileName = URLEncoder.encode(fileName,"UTF8");//其他浏览器  
+	    }  
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + finalFileName + "\"");//这里设置一下让浏览器弹出下载提示框，而不是直接在浏览器中打开  
+        response.setContentType("application/vnd.ms-excel");      
+        OutputStream ouputStream = response.getOutputStream();    
+        wb.write(ouputStream);    
+        ouputStream.flush();    
+        ouputStream.close();    
+   }     
 }
