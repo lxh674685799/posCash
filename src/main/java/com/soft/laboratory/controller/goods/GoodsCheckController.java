@@ -37,7 +37,6 @@ public class GoodsCheckController extends GenericController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping({ "list" })
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response,Goods goods) throws Exception {
@@ -50,7 +49,30 @@ public class GoodsCheckController extends GenericController {
 		return mv;		
 	}
 	
-	@SuppressWarnings("unchecked")
+	@RequestMapping({ "list1" })
+	public ModelAndView list1(HttpServletRequest request,
+			HttpServletResponse response,Goods goods) throws Exception {
+		SysUser loginUser =SystemContext.getCurrentUser(request);
+		String id = loginUser.getId();
+		if(!id.equals(Const.SYSTEM_ADMIN_ID)){
+			goods.setUserId(loginUser.getId());
+		}
+		ModelAndView mv= getAutoView(request);
+		return mv;		
+	}
+	
+	@RequestMapping({ "list2" })
+	public ModelAndView list2(HttpServletRequest request,
+			HttpServletResponse response,Goods goods) throws Exception {
+		SysUser loginUser =SystemContext.getCurrentUser(request);
+		String id = loginUser.getId();
+		if(!id.equals(Const.SYSTEM_ADMIN_ID)){
+			goods.setUserId(loginUser.getId());
+		}
+		ModelAndView mv= getAutoView(request);
+		return mv;		
+	}
+	
 	@RequestMapping({ "getByCode" })
 	public void getByCode(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -63,17 +85,7 @@ public class GoodsCheckController extends GenericController {
 			return;
 		}
 		Goods chechGoods = goodsToCheckGoods(goods);
-			/*JsonConfig jsonConfig = new JsonConfig();
-
-			jsonConfig.setExcludes(new String[]{"type","factory","user"});//除去dept属性
-
-			JSONObject json =JSONObject.fromObject(goods, jsonConfig);
-
-			s = json.toString();
-			System.out.println(s);*/
-		//return chechGoods;
 		String json =JSONObject.fromObject(chechGoods).toString();
-		System.out.println(json);
 		response.setContentType("text/json;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");  
 		response.getWriter().print(json);
@@ -96,6 +108,7 @@ public class GoodsCheckController extends GenericController {
 		checkGoods.setCreateTime(goods.getCreateTime());
 		checkGoods.setUserId(goods.getUser().getId());
 		checkGoods.setUserName(goods.getUser().getName());
+		checkGoods.setVipCreditMon(goods.getVipCreditMon());
 		return checkGoods;
 	}
 	
@@ -106,7 +119,6 @@ public class GoodsCheckController extends GenericController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping({ "dialog" })
 	public ModelAndView Dialog(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

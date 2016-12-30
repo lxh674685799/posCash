@@ -53,7 +53,13 @@
                 <td align="left" class="left"> 
                 ${goods.moneyCre}&nbsp;元&nbsp;+&nbsp;${goods.creditMon}&nbsp;卷
                 </td>
-            </tr>            
+            </tr>     
+              <tr>
+                <td align="right" class="tabRight">VIP销售价（积分）:</td>
+                <td align="left" class="left"> 
+                ${goods.vipCreditMon}&nbsp;卷
+                </td>
+            </tr>          
             <tr>
                 <td align="right" class="tabRight">创建时间:</td>
                 <td align="left" class="left">

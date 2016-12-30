@@ -34,7 +34,10 @@
               <tr>
                 <td align="right" class="tabRight">地址:</td>
                 <td align="left" class="left"> 
-               ${factory.address }
+                <textarea style="width: 90%;overflow-y:visible"  >
+                 ${factory.address }
+                </textarea>
+              
                 </td>
             </tr>            
             <tr align="center"><td colspan="2">

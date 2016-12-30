@@ -42,9 +42,9 @@ public class GoodsService extends GenericService<Goods> {
 	 */
 	public HSSFWorkbook export(List<Goods> list) {
 		
-		 String[] excelHeader = { "序号","商品条码", "商品名称", "商品类型","供货商","进货价","库存","销售价（现金）","销售价（积分）","销售价（现金+积分）"}; 
+		 String[] excelHeader = { "序号","商品条码", "商品名称", "商品类型","供货商","进货价","库存","销售价（现金）","销售价（积分）","销售价（现金+积分）","VIP售价"}; 
 		// 单元格列宽  
-		 int[] excelHeaderWidth = { 80, 120, 120, 100, 100, 100, 100, 120, 120,150  };
+		 int[] excelHeaderWidth = { 80, 120, 120, 100, 100, 100, 100, 120, 120,150, 120  };
 		     
 		HSSFWorkbook wb = new HSSFWorkbook();    
         HSSFSheet sheet = wb.createSheet("Campaign");
@@ -80,10 +80,12 @@ public class GoodsService extends GenericService<Goods> {
             row.createCell(3).setCellValue(goods.getType().getName());    
             row.createCell(4).setCellValue(goods.getFactory().getName());
             row.createCell(5).setCellValue(goods.getInPrice());
-            row.createCell(6).setCellValue(goods.getInventory());
+            row.createCell(6).setCellValue(goods.getSum());
             row.createCell(7).setCellValue(goods.getMoney());
             row.createCell(8).setCellValue(goods.getCredit());
             row.createCell(9).setCellValue(goods.getMoneyCre() + " + " + goods.getCreditMon());
+            row.createCell(10).setCellValue(goods.getVipCreditMon());
+
         }    
         return wb;
 	}

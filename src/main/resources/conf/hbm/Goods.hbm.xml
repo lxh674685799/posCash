@@ -16,7 +16,10 @@
 	<property name="money" column="g_money" type="double"/>
 	<property name="credit" column="g_credit" type="double"/>
 	<property name="moneyCre" column="g_moneyCre" type="double"/>
+	
 	<property name="creditMon" column="g_creditMon" type="double"/>
+	<property name="vipCreditMon" column="g_vipCreditMon" type="double"/>
+	
 	<property name="createTime" column="g_createTime" type="string"/>
 	<property name="remark" column="g_remark" type="string"/>
 	

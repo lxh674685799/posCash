@@ -2,7 +2,6 @@ package com.soft.core.util;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -29,6 +28,8 @@ public class PrintUtil implements Printable {
     private String sale_credit;
     //实收点卷
     private String total_credit; 
+    
+    private GoodsLog goodslog;
 
     
     // 构造函数  
@@ -42,13 +43,15 @@ public class PrintUtil implements Printable {
         // 总金额  
         this.sale_sum = log.getCountMoney(); 
         // 总金额  卷
-        this.sale_credit = log.getCountCredit();
+        this.total_credit = log.getCountCredit();
         // 
-        this.total_credit = log.getReceiveCredit();
+        this.sale_credit = log.getReceiveCredit();
         // 实收  
         this.practical = log.getReceiveMoney();  
         // 找零  
         this.changes = log.getChangeMoney();  
+        
+        this.goodslog = log;
     } 
     
 	@Override
@@ -121,13 +124,32 @@ public class PrintUtil implements Printable {
 	        g2.drawLine((int) x, (int) (y + line), (int) x + 160, (int) (y + line));  
 	        line += heigth;  
 	  
-	        g2.drawString("兑换商品数:" + sale_num + "件", (float) x, (float) y + line);  
-	        line += heigth; 
-	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "券", (float) x, (float) y + line);  
-	        line += heigth;  
-	        g2.drawString("实收:" + practical + "元，"+ sale_credit + "券", (float) x, (float) y + line); 
-	        line += heigth;
-	        g2.drawString("找零:" + changes + "元", (float) x, (float) y + line);  
+	        if(goodslog.getLogType().equals("2")){
+	        	  g2.drawString("退货商品数:" + sale_num + "件", (float) x, (float) y + line);  
+	        }else{
+	        	if(goodslog.getCheckType().equals("4")){
+		        	  g2.drawString("赠送商品数:" + sale_num + "件", (float) x, (float) y + line);  
+		        	  line += heigth; 
+		  	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "券", (float) x, (float) y + line);  
+	        	}else if(goodslog.getCheckType().equals("5")){
+	        		 g2.drawString("兑换商品数:" + sale_num + "件", (float) x, (float) y + line);  
+	     	        line += heigth; 
+	     	        g2.drawString("合计:" + total_credit + "券", (float) x, (float) y + line);  
+	     	        line += heigth;  
+	     	        g2.drawString("实收:" + sale_credit + "券", (float) x, (float) y + line); 
+	     	       
+	        	}else{
+	        		 g2.drawString("兑换商品数:" + sale_num + "件", (float) x, (float) y + line);  
+		     	        line += heigth; 
+		     	        g2.drawString("合计:" + sale_sum + "元，"+ total_credit + "券", (float) x, (float) y + line);  
+		     	        line += heigth;  
+		     	        g2.drawString("实收:" + practical + "元，"+ sale_credit + "券", (float) x, (float) y + line); 
+		     	        line += heigth;
+		     	        g2.drawString("找零:" + changes + "元", (float) x, (float) y + line); 
+		        	}
+	        }
+	        
+	        
 	        line += heigth;  
 	        g2.drawString("时间:" + Calendar.getInstance().getTime().toLocaleString(), (float) x, (float) y + line);  
 	  

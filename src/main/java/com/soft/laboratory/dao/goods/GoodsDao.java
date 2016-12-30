@@ -14,7 +14,7 @@ public class GoodsDao extends HibernateGenericDao<Goods> {
 	 * @return
 	 */
 	public Goods getByCode(String code) {
-		String hql="from Goods d where d.code ="+code;
+		String hql="from Goods d where d.code = '"+code+"'";
 		Query query = getSession().createQuery(hql);
 		Goods goods =(Goods) query.uniqueResult();
 		return goods;

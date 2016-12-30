@@ -24,12 +24,12 @@ public class GoodsInfoService extends GenericService<GoodsInfo> {
 		return goodsInfoDao;
 	}
 
-	public int getTotalDiv(String goodName, String startTime, String endTime) {
-		return goodsInfoDao.getTotalDiv(goodName,startTime,endTime);
+	public int getTotalDiv(String goodName, String startTime, String endTime, String payType) {
+		return goodsInfoDao.getTotalDiv(goodName,startTime,endTime,payType);
 	}
 
-	public List listByPageByDiv(Page pagination, String goodName, String startTime, String endTime) {
-		return goodsInfoDao.listByPageByDiv(pagination,goodName,startTime,endTime);
+	public List listByPageByDiv(Page pagination, String goodName, String startTime, String endTime, String payType) {
+		return goodsInfoDao.listByPageByDiv(pagination,goodName,startTime,endTime,payType);
 	}
 	
 }

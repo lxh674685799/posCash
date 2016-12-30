@@ -34,11 +34,6 @@ $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
 
-
-		$("#calculateOutput").text("0");
-
-		$("#calculateOutput1").text("0");
-
 	window.onhelp = function(){return false};
 	
 	//绑定键盘事件
@@ -47,21 +42,31 @@ $(function(){
 		var curKey = e.keyCode || e.which || e.charCode;
 	
 		 if(curKey == 27){
-			window.location.href = "${ctx}/goods/check/list.do";
+			window.location.href = "${ctx}/goods/check/list1.do";
 			//return false;
 			event.preventDefault();
 		}else if(curKey== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
-			$.ligerDialog.close();//先关闭弹出框  放置多开
-			var urlSrc =  "${ctx}/goods/check/dialog.do";
-			 $.ligerDialog.open({
-				 id:'memberDialog',
-			    height:120,
-				width: 300,
-				title : '会员登录(手机号登录)',
-				url: urlSrc, 
-				isResize: true,
-				allowClose:true,
-			 }); 
+				  //增加商品到日志记录
+			  //进行商品信息后台保存操作 并还原数组
+			
+			  	if ( e && e.preventDefault ) 
+			e.preventDefault(); 
+			else
+			window.event.returnValue = false;
+		
+			  addToGoodsStr();
+			 	 
+		   //判断有无商品商品
+		   if(goodsStr.length==0){
+			  return;
+		   } 
+			  
+			checkType = 4;
+
+			addGoodsLog();
+			
+			//延迟执行函数
+			setTimeout("reloadInfor()",200);
 		} else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
 			
 			if ( e && e.preventDefault ) 
@@ -79,16 +84,21 @@ $(function(){
 			
 			numericalPayfor();
 		} else if(curKey== 115){//F3值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+			
+			if ( e && e.preventDefault ) 
+				e.preventDefault(); 
+				else
+				window.event.returnValue = false;
+			
 			admixPayfor();
-		} else if(curKey== 116){//F4值112 结账
+		} else if(curKey== 116){//F4值112 退货
 			if ( e && e.preventDefault ) 
 				e.preventDefault(); 
 				else
 				window.event.returnValue = false;
 			
 			checkOutGoods();
-		} 
-
+		}  
 	});
 	
 	//查询商品信息
@@ -111,10 +121,9 @@ $(function(){
 			 	var inputVal = $("#calculateInput").val();
 			 	if(sumMoney == 0) return;
 			 	if(sumMoney > inputVal){
-					$.ligerDialog.warn("收入金额数小于结账总金额数！");
+					$.ligerDialog.warn("金额数小于结账总金额数！");
 				}else{
 					$("#calculateOutput").text((inputVal*1 - sumMoney*1).toFixed(2));
-					 changeMoney =  (inputVal*1 - sumMoney*1).toFixed(2);
 				} 
 			} 
 		});
@@ -289,11 +298,58 @@ function asynQueryGoods(){
 	 //移除时候判断是否还有商品信息并清除信息
 	 cleanAccounts();
  }
-
+ //付款方式改变
+ function  payTypeChange(a){
+	 var b = $(a);
+	 var type = b.val();
+	var parentTr =  b.parent().parent();
+	var moneyHid = b.parent().parent().children("[name='moneyHid']").text().trim();
+	var creditHid = b.parent().parent().children("[name='creditHid']").text().trim();
+	var moneyCre = b.parent().parent().children("[name='moneyCre']").text().trim();
+	var creditMon = b.parent().parent().children("[name='creditMon']").text().trim();
+	
+	if(type == 1){//现金
+		b.parent().parent().children("[name='money']").text(moneyHid);
+		b.parent().parent().children("[name='credit']").text(0);
+		
+		//计算总账和更改总账
+		sumRowAccounts();
+		addCountRow(sumMoney,sumCredit);
+		
+		//设置结账方式
+		checkType = 1;
+		
+	}else if(type == 2){//积分
+		b.parent().parent().children("[name='money']").text(0);
+		b.parent().parent().children("[name='credit']").text(creditHid);
+		
+		//计算总账和更改总账
+		sumRowAccounts();
+		addCountRow(sumMoney,sumCredit);
+		
+		//设置结账方式
+		checkType = 2;
+		
+	}else if(type == 3){//积分和现金
+		b.parent().parent().children("[name='money']").text(moneyCre);
+		b.parent().parent().children("[name='credit']").text(creditMon);
+		
+		//计算总账和更改总账
+		sumRowAccounts();
+		addCountRow(sumMoney,sumCredit);
+		
+		//设置结账方式
+		checkType = 3;
+	}
+	
+	//结账运算
+	checkOutput();
+ 	
+ }
  
  //计算总账
  function  addCountRow(countMoney,countCredit){
-	  $("#body").children("#countDiv").children("#totalDiv").html(countMoney.toFixed(2)+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
+	  $("#totalDiv").html(countMoney+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
  }
  
  
@@ -460,6 +516,7 @@ function asynQueryGoods(){
  function  addToGoodsStr(){
 	 goodsStr = [];
 	 goodsStr.splice(0,goodsStr.length);
+
 	 //获取商品信息
 	 table.find("tr").each(function(index,g){
 		    var tdCode = $(this).children("[name='code']");//得到商品编码
@@ -475,6 +532,7 @@ function asynQueryGoods(){
 	});
 	//获取结账的收入金额，积分和找零
 	 receiveMoney = $("#calculateInput").val();
+	 changeMoney =  $("#calculateOutput").val();
 	 receiveCredit = $("#calculateCreditInput").val();	 
  }
  //向后台发送日志请求
@@ -486,6 +544,14 @@ function asynQueryGoods(){
 	});
  }
 
+ //执行退货
+ function addGoodsLog1(){
+	 var memberNo = $("#memberNo").text();
+	$.post("${ctx}/goods/goodsLog/save1.do",{goodsInfo:goodsStr.toString(),checkType:checkType,countMoney:sumMoney,countCredit:sumCredit,receiveMoney:receiveMoney,changeMoney:changeMoney,receiveCredit:receiveCredit,memberNo:memberNo,isUserMember:isUserMember},function(result){
+		//还原数组为空
+		goodsStr = [];
+	});
+ }
  
  //确认按钮操作  
  function checkOutGoods(){
@@ -497,53 +563,19 @@ function asynQueryGoods(){
 	   if(goodsStr.length==0){
 		  return;
 	   } 
-	   //判断收入金额
-	   var inputVal = $("#calculateInput").val();
-	   if(inputVal == ""){
-		   inputVal = 0;
-		}
-	   if(sumMoney > inputVal){
-			$.ligerDialog.warn("收入金额数小于结账总金额数！");
-			return;
-		}
-	   
-	   //判断是否使用会员
-	   if($("#useMember").attr("checked")){//使用
-		   if($("#memberNo").text() == ''){
-			   $.ligerDialog.warn("没有会员登录！");
-			   return;
-		   }
-		   //判断会员积分
-		  var  memberCredit = $("#memberCredit").text(); 
-		   if(memberCredit < (sumCredit - receiveCredit)){
-			   $.ligerDialog.warn("会员积分不足！");
-			   return;
-		   }
-		   //设置使用会员
-		   isUserMember = 2;
-		   
-		}else{//不使用
-			//判断收入积分
-			   if(receiveCredit < sumCredit){
-				   $.ligerDialog.warn("收入积分小于总积分！");
-				   return;
-			   }
-		}
-	   //判断结束
-	   	   
+
 	   //增加商品到日志记录
-		addGoodsLog();
+		addGoodsLog1();
 		
 		goodsStr = [];
 
 		//延迟执行函数
 		setTimeout("reloadInfor()",200);
-
  }
  
  //刷新页面信息
  function reloadInfor(){
-	 window.location.href = "${ctx}/goods/check/list.do";
+	 window.location.href = "${ctx}/goods/check/list1.do";
 		//return false;
 	event.preventDefault();
  }
@@ -683,15 +715,10 @@ margin-bottom: 135px;
 <body id="body">
 <div class='top' id="top">
 <fieldset class="fieldset">
-	<legend class="legend">商品查询-->'F1'会员登录,'F2'现金,'F3'积分,'F4'现金积分,'F5'结账,'Esc'取消</legend>
+	<legend class="legend">商品查询-->'F1'赠送,'F2'现金,'F3'积分,'F4'现金积分,'F5'退货,'Esc'取消</legend>
 	
 	<table border="0" cellpadding="3" cellspacing="1" width="100%" class="searchform">
 	
-	<tr>	
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员姓名：</div><div id="memberName" style='font-weight:bold;display:inline;'></div></td>
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员积分：</div><div id="memberCredit" style='font-weight:bold;display:inline;'></div></td>
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员号：</div><div id="memberNo" style='font-weight:bold;display:inline;'></div></td>
-	</tr>
 		<tr>
 			<td width="15%" align="right">商品条码：</td>
 			<td width="25%" align="left">
@@ -701,6 +728,12 @@ margin-bottom: 135px;
 			</td>
 		</tr>
 	</table>
+	
+	 <div id='countDiv22'>
+  		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
+  		<div style='float:left;' id="totalDiv">0&nbsp;元&nbsp;0&nbsp;卷</div>
+  </div> 
+  
 </fieldset>
 </div>
 	<table id="checkGoods" cellpadding="0" class="blues" cellspacing="0">
@@ -715,33 +748,6 @@ margin-bottom: 135px;
 		</tr>
 	</thead>
 	</table>
-	
-   <div id="countTypeDiv">
- 		<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
-
- </div>	 
-  <div id='countDiv'>
-  		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
-  		<div style='float:left;' id="totalDiv">0&nbsp;元&nbsp;0&nbsp;卷</div>
-  </div> 
-   <div class="queren"><div class='btn_queren'onclick="checkOutGoods()">确认</div></div>
-   <div id='calculateDiv'>
- 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div>
- 	<input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div>
- 	
- 	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
- 	<div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
- 	</div>
- </div>  
- 
-<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div>
-
-	<input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' />
-	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
- 	<div id='calculateOutput1' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
- 	</div>
-
-</div>
-   
+	   
 </body>
 </html>

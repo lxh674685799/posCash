@@ -152,6 +152,9 @@ function exportExcel(){
 		<display:column title="销售价(现金+点券)"  style="text-align:right;">
 				${f.moneyCre}元 + ${f.creditMon}券
 		</display:column>
+		<display:column title="VIP销售价(点券)"  style="text-align:right;">
+				${f.vipCreditMon}券
+		</display:column>
 		<display:column title="库存"  style="text-align:right;">
 				${f.sum}件
 		</display:column>

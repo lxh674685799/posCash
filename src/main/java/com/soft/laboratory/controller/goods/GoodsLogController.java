@@ -50,6 +50,8 @@ public class GoodsLogController extends GenericController {
 	
 	@Resource
 	private GoodsService goodsService;
+	
+	
 	/**
 	 * 保存，更新商品
 	 * @param request
@@ -58,6 +60,7 @@ public class GoodsLogController extends GenericController {
 	 */
 	@RequestMapping({ "save" })
 	public void save(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		String checkType = request.getParameter("checkType");//结账方式
 		String countMoney = request.getParameter("countMoney");//结账总金额
 		String countCredit = request.getParameter("countCredit");//结账总积分
@@ -66,10 +69,9 @@ public class GoodsLogController extends GenericController {
 		String receiveCredit = request.getParameter("receiveCredit");//收入积分
 		String memberNo = request.getParameter("memberNo");//会员号
 		String isUserMember = request.getParameter("isUserMember");
+		
 		String[] goodsInfo = RequestUtil.getStringAryByStr(request, "goodsInfo");//商品信息
-		
-		System.out.println(goodsInfo.toString());
-		
+				
 		SysUser loginUser =SystemContext.getCurrentUser(request);
 		String userId = loginUser.getId();
 		List<GoodsInfo> list = new ArrayList<GoodsInfo>();
@@ -95,7 +97,6 @@ public class GoodsLogController extends GenericController {
 				}
 			}
 			
-			
 			log.setCreateTime(DateFormatUtil.getNowByString(""));
 			log.setCreateUserId(userId);
 			log.setCheckType(checkType);
@@ -106,11 +107,12 @@ public class GoodsLogController extends GenericController {
 			log.setChangeMoney(changeMoney);
 			log.setMemberNo(memberNo);//
 			log.setSurplusCredit(surplusCredit.toString());
+			log.setLogType("1");
 			int saleNum =0;
 			
 			for(String str : goodsInfo){
 				GoodsInfo info = new GoodsInfo();
-				String[] strs = str.split("#");
+				String[] strs = str.split("&#&");
 				info.setCode(strs[0]);
 				info.setName(strs[1]);
 				info.setMoney(strs[2]);
@@ -118,9 +120,7 @@ public class GoodsLogController extends GenericController {
 				info.setNumber(strs[4]);
 				info.setPayType(strs[5]);
 				list.add(info);
-				
 				saleNum = saleNum + Integer.valueOf(strs[4]);
-				
 			}
 			
 			
@@ -131,7 +131,7 @@ public class GoodsLogController extends GenericController {
 			//保存记录的信息
 			for(String str : goodsInfo){
 				GoodsInfo info = new GoodsInfo();
-				String[] strs = str.split("#");
+				String[] strs = str.split("&#&");
 				info.setCode(strs[0]);
 				info.setName(strs[1]);
 				info.setMoney(strs[2]);
@@ -143,6 +143,94 @@ public class GoodsLogController extends GenericController {
 				
 				Goods goods =goodsService.getByCode(strs[0]);
 				goods.setSum(goods.getSum()-Integer.valueOf(strs[4]));
+				goodsService.update(goods);
+				
+				goodsInfoService.add(info);
+				
+			}
+			//显示商品名称   商品数量  显示数量  
+			
+			// 执行打印
+			PrintSale(log,list,loginUser,saleNum);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 商品退货
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping({ "save1" })
+	public void save1(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String checkType = request.getParameter("checkType");//结账方式
+		String countMoney = request.getParameter("countMoney");//结账总金额
+		String countCredit = request.getParameter("countCredit");//结账总积分
+		String receiveMoney = request.getParameter("receiveMoney");//收入金额
+		String changeMoney = request.getParameter("changeMoney");//找零金额
+		String receiveCredit = request.getParameter("receiveCredit");//收入积分
+		
+		String[] goodsInfo = RequestUtil.getStringAryByStr(request, "goodsInfo");//商品信息
+				
+		SysUser loginUser =SystemContext.getCurrentUser(request);
+		String userId = loginUser.getId();
+		List<GoodsInfo> list = new ArrayList<GoodsInfo>();
+		GoodsLog log = new GoodsLog();
+		Double surplusCredit = 0D;//剩余积分
+		
+		try{		
+			log.setCreateTime(DateFormatUtil.getNowByString(""));
+			log.setCreateUserId(userId);
+			log.setCheckType(checkType);
+			log.setCountMoney(countMoney);
+			log.setCountCredit(countCredit);
+			log.setReceiveMoney(receiveMoney);
+			log.setReceiveCredit(receiveCredit);
+			log.setChangeMoney(changeMoney);
+			log.setMemberNo(null);//
+			log.setLogType("2");
+			log.setSurplusCredit(surplusCredit.toString());
+			int saleNum =0;
+			
+			for(String str : goodsInfo){
+				GoodsInfo info = new GoodsInfo();
+				String[] strs = str.split("&#&");
+				info.setCode(strs[0]);
+				info.setName(strs[1]);
+				info.setMoney(strs[2]);
+				info.setCredit(strs[3]);
+				info.setNumber(strs[4]);
+				info.setPayType(strs[5]);
+				list.add(info);
+				
+				saleNum = saleNum + Integer.valueOf(strs[4]);
+			}
+			
+			
+			String goodsInfoJson =JSONArray.fromObject(list).toString();
+			log.setGoodsInfo(goodsInfoJson);
+			String goodLogId =goodsLogService.add(log);
+			
+			//保存记录的信息
+			for(String str : goodsInfo){
+				GoodsInfo info = new GoodsInfo();
+				String[] strs = str.split("&#&");
+				info.setCode(strs[0]);
+				info.setName(strs[1]);
+				info.setMoney(strs[2]);
+				info.setCredit(strs[3]);
+				info.setNumber(strs[4]);
+				info.setPayType(checkType);
+				info.setLogId(goodLogId);
+				info.setCrateDate(DateFormatUtil.formatDate(new Date()));
+				
+				Goods goods =goodsService.getByCode(strs[0]);
+				goods.setSum(goods.getSum()+Integer.valueOf(strs[4]));
 				goodsService.update(goods);
 				
 				goodsInfoService.add(info);
@@ -173,7 +261,7 @@ public class GoodsLogController extends GenericController {
             // 通俗理解就是书、文档  
             Book book = new Book();  
             // 设置成竖打  
-            PageFormat pf = new PageFormat();  
+            PageFormat pf = new PageFormat();
             pf.setOrientation(PageFormat.PORTRAIT);  
   
             // 通过Paper设置页面的空白边距和可打印区域。必须与实际打印纸张大小相符。  
@@ -203,13 +291,11 @@ public class GoodsLogController extends GenericController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping({ "list" })
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		GoodsLog log = new  GoodsLog();
-		SysUser loginUser =SystemContext.getCurrentUser(request);
-		String id = loginUser.getId();
+
 		int page =1;
 		int total = 0;
 		if(request.getParameter("page")!=null){
@@ -237,6 +323,8 @@ public class GoodsLogController extends GenericController {
 		String goodName = request.getParameter("goodName");
 		String startTime = request.getParameter("startTime");
 		String endTime = request.getParameter("endTime");
+		String payType = request.getParameter("payType");
+
 
 		if(goodName != null){
 			if(goodName.equals("")){
@@ -255,19 +343,26 @@ public class GoodsLogController extends GenericController {
 			}
 		}
 		
+		if(payType != null){
+			if(payType.equals("")||payType.equals("0")){
+				payType=null;
+			}
+		}
+		
 		int page =1;
 		int total = 0;
 		if(request.getParameter("page")!=null){
 			page = Integer.parseInt(request.getParameter("page"));
 			total = Integer.parseInt(request.getParameter("totalCount"));
 		}else{
-			total = goodsInfoService.getTotalDiv(goodName,startTime,endTime); 
+			total = goodsInfoService.getTotalDiv(goodName,startTime,endTime,payType); 
 		}	
 
 		Page pagination = new Page(page, total);
-		List list = goodsInfoService.listByPageByDiv(pagination,goodName,startTime,endTime);
+		List list = goodsInfoService.listByPageByDiv(pagination,goodName,startTime,endTime,payType);
+		
 		ModelAndView mv= getAutoView(request);
-		mv.addObject("page",pagination).addObject("GoodsInfo", list).addObject("endTime", endTime).addObject("startTime", startTime).addObject("goodName", goodName);
+		mv.addObject("page",pagination).addObject("GoodsInfo", list).addObject("endTime", endTime).addObject("startTime", startTime).addObject("goodName", goodName).addObject("payType", payType);
 		return mv;		
 	}
 }

@@ -18,7 +18,7 @@ var sumCredit = 0;//结账积分卷总值
 
 var table;
 
-var checkType= 1;//结账方式   默认现金
+var checkType= 5;//结账方式   默认现金
 
 var goodsStr = [];//商品信息数组
 
@@ -34,7 +34,6 @@ $(function(){
 	//初始化table值
 	table  = $("#checkGoods");
 
-
 		$("#calculateOutput").text("0");
 
 		$("#calculateOutput1").text("0");
@@ -45,42 +44,13 @@ $(function(){
 	$('#body').keydown(function(event){
 		var e = event || window.event;
 		var curKey = e.keyCode || e.which || e.charCode;
-	
+		
 		 if(curKey == 27){
-			window.location.href = "${ctx}/goods/check/list.do";
+			window.location.href = "${ctx}/goods/check/list2.do";
 			//return false;
 			event.preventDefault();
-		}else if(curKey== 112){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
-			$.ligerDialog.close();//先关闭弹出框  放置多开
-			var urlSrc =  "${ctx}/goods/check/dialog.do";
-			 $.ligerDialog.open({
-				 id:'memberDialog',
-			    height:120,
-				width: 300,
-				title : '会员登录(手机号登录)',
-				url: urlSrc, 
-				isResize: true,
-				allowClose:true,
-			 }); 
-		} else if(curKey== 113){//F1值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
+		}else if(curKey== 116){//F4值112 结账
 			
-			if ( e && e.preventDefault ) 
-				e.preventDefault(); 
-				else
-				window.event.returnValue = false;
-			
-			cashPayfor();
-		} else if(curKey== 114){//F2值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
-			
-			if ( e && e.preventDefault ) 
-				e.preventDefault(); 
-				else
-				window.event.returnValue = false;
-			
-			numericalPayfor();
-		} else if(curKey== 115){//F3值112 在ie下回打开微软帮助界面 所有改为F2登录会员 
-			admixPayfor();
-		} else if(curKey== 116){//F4值112 结账
 			if ( e && e.preventDefault ) 
 				e.preventDefault(); 
 				else
@@ -165,8 +135,9 @@ function asynQueryGoods(){
 			var credit = data.credit;//商品积分
 			var moneyCre = data.moneyCre;//商品现金部分
 			var creditMon = data.creditMon;//商品积分部分
+			var vipCredit = data.vipCreditMon;
 			//开始增加商品信息
-			
+						
 			var isExist = false;
 			table.find("tr").each(function(index,g){
 			    var tdCode = $(this).children("[name='code']");
@@ -194,15 +165,14 @@ function asynQueryGoods(){
 				//结算行
 				addCountRow(totalMoney,0);
 				//商品全部以现金结账
-	            cashPayfor();
+	            numericalPayfor();
 				
 				return;
 			}
 				
-				
 			 var row = $("<tr id='"+code+"'></tr>");
 			//td 最后隐藏了 商品的价格信息可取
-			 var td = $("<td style='text-align: center;' name='code'> "+code+"</td><td name='goodsName'>"+ name+"</td><td name='money'>"+ money+"</td><td name='credit'>"+0+"</td><td name='numberTd'> <img src='${ctx}/resources/images/down.png' onclick='reduceNumber(this)' title='减少' width='14px'/>&nbsp;<input name='number' readonly='true' style='width:20px' value='1' />&nbsp;<img src='${ctx}/resources/images/add.png' onclick='addNumber(this)' title='增加'  width='13px'/></td><td name='operate' style='width:20%'><img src='${ctx}/resources/images/remove.png' onclick='removeSelf(this)' title='移除' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='moneyCre' name='moneyCre' style='display:none;'>"+moneyCre+"</td><td class='creditMon' name='creditMon' style='display:none;'>"+creditMon+"</td><td name='moneyHid' style='display:none;'>"+money+"</td><td  name='creditHid' style='display:none;'>"+credit+"</td>");
+			 var td = $("<td style='text-align: center;' name='code'> "+code+"</td><td name='goodsName'>"+ name+"</td><td name='credit'>"+vipCredit+"</td><td name='numberTd'> <img src='${ctx}/resources/images/down.png' onclick='reduceNumber(this)' title='减少' width='14px'/>&nbsp;<input name='number' readonly='true' style='width:20px' value='1' />&nbsp;<img src='${ctx}/resources/images/add.png' onclick='addNumber(this)' title='增加'  width='13px'/></td><td name='operate' style='width:20%'><img src='${ctx}/resources/images/remove.png' onclick='removeSelf(this)' title='移除' />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='moneyCre' name='moneyCre' style='display:none;'>"+moneyCre+"</td><td class='creditMon' name='creditMon' style='display:none;'>"+vipCredit+"</td><td name='moneyHid' style='display:none;'>"+money+"</td><td  name='creditHid' style='display:none;'>"+vipCredit+"</td>");
 			 row.append(td);
 			 table.append(row);
 			//增加商品信息结束
@@ -219,7 +189,7 @@ function asynQueryGoods(){
              }
              
              //商品全部以现金结账
-             cashPayfor();
+             numericalPayfor();
 		},
 
 	});
@@ -293,7 +263,7 @@ function asynQueryGoods(){
  
  //计算总账
  function  addCountRow(countMoney,countCredit){
-	  $("#body").children("#countDiv").children("#totalDiv").html(countMoney.toFixed(2)+"&nbsp;元&nbsp;"+countCredit+ "&nbsp;卷");
+	  $("#body").children("#countDiv").children("#totalDiv").html(countCredit+ "&nbsp;卷");
  }
  
  
@@ -342,39 +312,6 @@ function asynQueryGoods(){
 	}
  }
  
- //现金结账
- function cashPayfor(){
-	 //遍历所有tr获取值
-	 table.find("tr").each(function(index,g){
-		    var tdMoney = $(this).children("[name='money']");//得到money列
-		    var tdCredit = $(this).children("[name='credit']");//得到积分列
-		    var tdMoneyHit = $(this).children("[name='moneyHid']");//得到隐藏money列
-		    var tdPayType = $(this).children("[name='operate']").children("[name='payType']");//得到select
-		    tdPayType.val(1);//设置为现金付款
-		    var tdMoneyHitValue = tdMoneyHit.text().trim()*1;
-		    tdMoney.text(tdMoneyHitValue);
-		    tdCredit.text(0);
-		  });
-	 //计算总价同时增加结算行
-	 sumRowAccounts();
-	 addCountRow(sumMoney,sumCredit);
-	 
-	//设置结账方式
-	checkType = 1;
-	
-	//结账运算
-	//checkOutput();
-	
-	
- 	 $("#calculateCreditInput").val("0");
-
- 	$("#calculateInput").val("0");
-
-	$("#calculateOutput").text("0");
-
-	$("#calculateOutput1").text("0");
- 	
- }
  //积分结账
  function numericalPayfor(){
 	 //遍历所有tr获取值
@@ -383,7 +320,7 @@ function asynQueryGoods(){
 		    var tdCredit = $(this).children("[name='credit']");//得到积分列
 		    var tdCreditHit = $(this).children("[name='creditHid']");//得到隐藏积分列
 		    var tdPayType = $(this).children("[name='operate']").children("[name='payType']");//得到select
-		    tdPayType.val(2);//设置为积分付款
+		    tdPayType.val(5);//设置为积分付款
 		    var tdCreditHitValue = tdCreditHit.text().trim()*1;
 		    tdCredit.text(tdCreditHitValue);
 		    tdMoney.text(0);
@@ -393,10 +330,8 @@ function asynQueryGoods(){
 	 addCountRow(sumMoney,sumCredit);
 	 
 	//设置结账方式
-	checkType = 2;
-	//结账运算
-	///checkOutput();
-	
+	checkType = 5;
+
 	 $("#calculateCreditInput").val("0");
 
 	 	$("#calculateInput").val("0");
@@ -406,40 +341,7 @@ function asynQueryGoods(){
 		$("#calculateOutput1").text("0");
  	
  }
- //混合结账 现金和积分
- function admixPayfor(){
-	//遍历所有tr获取值
-	 table.find("tr").each(function(index,g){
-		    var tdMoney = $(this).children("[name='money']");//得到money列
-		    var tdCredit = $(this).children("[name='credit']");//得到积分列
-		    var tdMoneyCre = $(this).children("[name='moneyCre']");//得到积分的现金隐藏列
-		    var tdCreditMon = $(this).children("[name='creditMon']");//得到积分的积分隐藏列
-		    var tdPayType = $(this).children("[name='operate']").children("[name='payType']");//得到select
-		    tdPayType.val(3);//设置为现金和积分
-		    var tdMoneyCreValue = tdMoneyCre.text().trim()*1;
-		    var tdCreditMonValue = tdCreditMon.text().trim()*1;
-		    tdMoney.text(tdMoneyCreValue);
-		    tdCredit.text(tdCreditMonValue);
-		  });
-	//计算总价同时增加结算行
-	 sumRowAccounts();
-	 addCountRow(sumMoney,sumCredit);
-	 
-	//设置结账方式
-	checkType = 3;
-	
-	//结账运算
-	//checkOutput();
-	
-	 $("#calculateCreditInput").val("0");
-
-	 	$("#calculateInput").val("0");
-
-		$("#calculateOutput").text("0");
-
-		$("#calculateOutput1").text("0");
- 	
- }
+ 
  //进行运算收入金额和找零
  function checkOutput(){
 		var inputVal = $("#calculateInput").val();
@@ -542,8 +444,8 @@ function asynQueryGoods(){
  }
  
  //刷新页面信息
- function reloadInfor(){
-	 window.location.href = "${ctx}/goods/check/list.do";
+function reloadInfor(){
+	 window.location.href = "${ctx}/goods/check/list2.do";
 		//return false;
 	event.preventDefault();
  }
@@ -562,104 +464,7 @@ function asynQueryGoods(){
  
 </script>
 <style type="text/css">
-.btn_payfor {
-  background: #3873F2  no-repeat scroll 0 0;
-    border: medium none;
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: bold;
-    height: 24px;
-    line-height: 24px;
-    margin-right: 10px;
-    text-align: center;
-    vertical-align: middle;
-    width: 60px;
-}
 
-.btn_payforMix {
-   background: #3873F2  no-repeat scroll 0 0;
-    border: medium none;
-    color: #ffffff;
-    font-size: 10px;
-    font-weight: bold;
-    height: 24px;
-    line-height: 24px;
-    margin-right: 10px;
-    text-align: center;
-    vertical-align: middle;
-    width: 60px;
-}
-#calculateDiv{
- margin-right:150px; 
-*margin-right:150px; 
-background-color:#D1D1D1;
-width:40%;
-height:66px;
-position:fixed;
-bottom:70px;
-right:0;
-font-size: 12px;
- padding-top:15px; 
- padding-left: 80px;
-
-
-}
-.credit{
-margin-right:150px; 
-*margin-right:150px; 
-background-color:#D1D1D1;
-width:40%;
-height:80px;
-position:fixed;
-bottom:0;
-right:0;
-font-size: 12px;
-padding-left: 80px;
-}
-.queren{
-background-color:#D1D1D1;
-height:151px;
-position:fixed;
-bottom:0;
-right:0;
-}
-.btn_queren{
- background: #3873F2  no-repeat scroll 0 0;
-  border: medium none;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: bold;
-  height: 20px;
-  line-height: 24px;
-  margin-right: 30px;
-  margin-top: 15px;
-  text-align: center; 
-  width: 85px; 
-  padding: 20px;
-}
-#countDiv{
-/* background-color:#EDEDED; */
-background-color:#D1D1D1;
-width:400px;
-height:70px;
-position:fixed;
-bottom:0;
-left:0;
-font-size: 12px;
-padding-left:30px;
-}
-
-#countTypeDiv{
-background-color:#D1D1D1;
-width:50%;
-height:135px;
-position:fixed;
-bottom:0;
-left:0;
-font-size: 16px;
-padding-top:16px;
-padding-right:180px;
-}
 body, html {
     height: 100%;
 }
@@ -683,15 +488,10 @@ margin-bottom: 135px;
 <body id="body">
 <div class='top' id="top">
 <fieldset class="fieldset">
-	<legend class="legend">商品查询-->'F1'会员登录,'F2'现金,'F3'积分,'F4'现金积分,'F5'结账,'Esc'取消</legend>
+	<legend class="legend">商品查询-->''F5'结账,'Esc'取消</legend>
 	
 	<table border="0" cellpadding="3" cellspacing="1" width="100%" class="searchform">
 	
-	<tr>	
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员姓名：</div><div id="memberName" style='font-weight:bold;display:inline;'></div></td>
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员积分：</div><div id="memberCredit" style='font-weight:bold;display:inline;'></div></td>
-		<td align="center"><div style='font-weight:bold;display:inline;'>会员号：</div><div id="memberNo" style='font-weight:bold;display:inline;'></div></td>
-	</tr>
 		<tr>
 			<td width="15%" align="right">商品条码：</td>
 			<td width="25%" align="left">
@@ -708,7 +508,6 @@ margin-bottom: 135px;
 		<tr>
 			<th>商品编码</th>
 			<th>商品名称</th>
-			<th>价格(元)</th>
 			<th>积分(卷)</th>
 			<th>数量</th>
 			<th>操作 </th>
@@ -716,31 +515,18 @@ margin-bottom: 135px;
 	</thead>
 	</table>
 	
-   <div id="countTypeDiv">
- 		<div style='font-weight:bold;float:left;'>&nbsp;&nbsp;使用会员积分:&nbsp;&nbsp;</div><div style="float:left;"><input style="width:10px;height:20px;" type="checkbox" name="useMember" id="useMember" /></div>  
-
- </div>	 
-  <div id='countDiv'>
-  		<div style='float:left;font-weight:bold'>总价:&nbsp;</div>
-  		<div style='float:left;' id="totalDiv">0&nbsp;元&nbsp;0&nbsp;卷</div>
-  </div> 
-   <div class="queren"><div class='btn_queren'onclick="checkOutGoods()">确认</div></div>
-   <div id='calculateDiv'>
- 	<div ><div style='font-weight:bold;float:left;'>收入金额:&nbsp;</div>
- 	<input style="width:20%;float:left;" type='text' value='' id='calculateInput' /></div>
- 	
- 	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
- 	<div id='calculateOutput' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
- 	</div>
- </div>  
  
-<div class="credit"><div style='font-weight:bold;float:left;'>收入积分:&nbsp;</div>
+  <div id='countDiv'>
+  		<div style='float:left;font-weight:bold;font-size: 20px'>总价:&nbsp;</div>
+  		<div style='float:left;font-size: 20px' id="totalDiv">0&nbsp;卷</div>
+  </div> 
+  </br> </br> </br>
 
-	<input style="width:20%;float:left;" type='text' value='0' id='calculateCreditInput' />
-	<div style='float:left;'><div style='font-weight:bold;float:left;'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
- 	<div id='calculateOutput1' style="float:left;font-size: 20px;margin-top: -2px;"></div>  
+<div class="credit"><div style='font-weight:bold;float:left;font-size: 20px'>收入积分:&nbsp;</div>
+	<input style="width:140px;float:left;" type='text' value='0' id='calculateCreditInput' />
+	<div style='float:left;'><div style='font-weight:bold;float:left;font-size: 20px'>&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;</div>
+ 	<div id='calculateOutput1' style="float:left;font-size: 20px;margin-top: -2px;font-size: 20px"></div>  
  	</div>
-
 </div>
    
 </body>

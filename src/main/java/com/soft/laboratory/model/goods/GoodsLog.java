@@ -53,6 +53,11 @@ public class GoodsLog extends BaseModel{
 	 */
 	private String createUserId;
 	
+	/**
+	 * 结账方式 1 结账  2 退货
+	 */
+	private String  logType;
+	
 	public String getId() {
 		return id;
 	}
@@ -125,6 +130,12 @@ public class GoodsLog extends BaseModel{
 	}
 	public void setSurplusCredit(String surplusCredit) {
 		this.surplusCredit = surplusCredit;
+	}
+	public String getLogType() {
+		return logType;
+	}
+	public void setLogType(String logType) {
+		this.logType = logType;
 	}
 	
 	
