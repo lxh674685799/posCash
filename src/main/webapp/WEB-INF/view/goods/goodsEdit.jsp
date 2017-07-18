@@ -22,6 +22,7 @@ $(function(){
 			money:{required:true,number:true},
 			moneyCre:{required:true,number:true},
 			creditMon:{required:true,number:true},
+			vipCreditMon:{required:true,number:true},
 			sum:{required:true,number:true}
 		},
 		messages:{
@@ -34,6 +35,7 @@ $(function(){
 			money:{required:"请输入销售金额！",number:"金额只能为数字！"},
 			moneyCre:{required:"请输入销售金额！",number:"金额只能为数字！"},
 			creditMon:{required:"请输入销售积分！",number:"积分只能为数字！"},
+			vipCreditMon:{required:"请输入销售积分！",number:"积分只能为数字！"},
 			sum:{required:"请输入库存数量！",number:"库存只能为数字！"}
 		}
 	});
@@ -195,12 +197,16 @@ function emptyOrg(){
                 <td align="left" class="left">
                 <input name="creditMon" type="text" id="creditMon" value="${goods.creditMon }" />
                 </td> 
-            </tr> 
-            <%-- <tr>
-                <td align="right" class="tabRight">库存（件）:</td>
+            </tr>
+             <tr>
+                <td align="center"  colspan="2" bgcolor="#AEDCE6">VIP销售价（积分）</td>
+              </tr>
+            <tr >
+                <td align="right" class="tabRight" >积分(卷):</td>
                 <td align="left" class="left">
-                <input name="inventory" type="text" id="inventory" value="${goods.inventory }" /></td>               
-            </tr>  --%>
+                <input name="vipCreditMon" type="text" id="vipCreditMon" value="${goods.vipCreditMon }" />
+                </td> 
+            </tr>
               <tr>
                 <td align="right" class="tabRight">备注:</td>
                 <td align="left" class="left"> 

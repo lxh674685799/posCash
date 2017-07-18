@@ -6,21 +6,7 @@
       <script src="${ctx}/resources/js/lg/plugins/ligerPortal.js" type="text/javascript"></script>
     <script type="text/javascript">
         var manager;
-        $(function ()
-        {
-            $("#portalMain").ligerPortal({
-                columns: [{
-                    panels: [
-                    {
-                        title: '通知公告',
-                        width: 1000,
-                        height: 320,
-                        url: '${ctx}/home/portal/noticeList.do'
-                    }
-                    ]
-                }]
-            }); 
-        }); 
+ 
         
         function memberTopUp(){
         	var c = screen.availHeight - 35;
@@ -44,7 +30,7 @@
         	window.open("${ctx}/goods/check/list.do", "", e, true);
         	};
         	
-        	function staticList(){
+          	function checkList1(){
            		var c = screen.availHeight - 35;
             	var a = screen.availWidth - 5;
             	var e = "top=0,left=0,height="
@@ -52,23 +38,32 @@
             			+ ",width="
             			+ a
             			+ ",status=no,toolbar=no,menubar=no,location=no,resizable=1,scrollbars=1";
-            	window.open("${ctx}/goods/goodsLog/statis.do", "", e, true);
+            	window.open("${ctx}/goods/check/list1.do", "", e, true);
             	};
+        	
+               	function checkList2(){
+               		var c = screen.availHeight - 35;
+                	var a = screen.availWidth - 5;
+                	var e = "top=0,left=0,height="
+                			+ c
+                			+ ",width="
+                			+ a
+                			+ ",status=no,toolbar=no,menubar=no,location=no,resizable=1,scrollbars=1";
+                	window.open("${ctx}/goods/check/list2.do", "", e, true);
+                	};
     </script>
 <style>
 
 #nav {
     line-height:30px;
+        float:left;
     background-color:#3873F2;
-    height:80px;
     width:120px;
-    float:left;
     padding:40px;
  color: #ffffff;
  text-align: center; 
  font-size: 45px;
-  font-weight: bold;	
-  position:relative;
+  font-weight: bold;
 left:20px;      
 }
 #section {
@@ -77,22 +72,35 @@ left:20px;
     width:120px;
     float:left;
     padding:40px;
-	 height:80px;
 	color: #ffffff;
 	 text-align: center; 
 	font-size: 45px;
   font-weight: bold;	
   position:relative;
-left:40px; 	 
+left:20px; 	
 }
 
-#static {
+#section1 {
     line-height:30px;
  background-color:#3873F2;
     width:120px;
     float:left;
     padding:40px;
-	 height:80px;
+	color: #ffffff;
+	 text-align: center; 
+	font-size: 45px;
+  font-weight: bold;	
+  position:relative;
+left: 40px;
+
+}
+
+#section2 {
+    line-height:30px;
+ background-color:#3873F2;
+    width:120px;
+    float:left;
+    padding:40px;
 	color: #ffffff;
 	 text-align: center; 
 	font-size: 45px;
@@ -113,13 +121,14 @@ left:60px;
  收银</br></br>结账
 </div>
 
-</br>
-</br></br>
-</br></br>
-</br></br>
-</br></br>
-</br>
 
-        <div style="width:100%;" id="portalMain"> </div> 
+<div id="section1" onclick="checkList2()">
+ VIP</br></br>结账
+</div>
+
+<div id="section2" onclick="checkList1()">
+ 赠送</br></br>退货
+</div>
+
 </body>
 </html>

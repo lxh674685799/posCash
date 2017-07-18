@@ -48,7 +48,8 @@ public class Goods extends BaseModel{
 	 */
 	private Double  moneyCre;//现金
 	private Double  creditMon;//积分
-	
+	//vip销售价
+	private Double  vipCreditMon;//积分
 	/**
 	 * 供货商
 	 */
@@ -201,6 +202,12 @@ public class Goods extends BaseModel{
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
+	}
+	public Double getVipCreditMon() {
+		return vipCreditMon;
+	}
+	public void setVipCreditMon(Double vipCreditMon) {
+		this.vipCreditMon = vipCreditMon;
 	}
 	
 	

@@ -20,6 +20,8 @@
 	<property name="surplusCredit" column="g_surplus_credit" type="string"/>
 	<property name="createTime" column="g_create_time" type="string"/>
 	<property name="createUserId" column="g_create_user_id" type="string"/>
+	<property name="logType" column="g_log_type" type="string"/>
+	
   </class>
 
 </hibernate-mapping>

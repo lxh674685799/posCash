@@ -3,7 +3,7 @@
 <%@include file="/commons/include/page.jsp" %>
 <%@include file="/commons/include/zTree.jsp" %>
 <script type="text/javascript" src="${ctx }/resources/js/My97DatePicker/WdatePicker.js"></script>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>   
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <html>
 <head>
@@ -31,8 +31,20 @@ $(function(){
 	<table border="0" cellpadding="2" cellspacing="1" width="100%" class="searchform">
 		<tr>
 			<td width="10%" align="right">商品名称：</td>
-			<td width="25%" align="left">
+			<td width="10%" align="left">
 			<input type="text" class="text" name="goodName" id="goodName" value="${goodName }" /></td>
+			<td width="10%" align="right">结账方式：</td>
+			<td width="10%" align="left">
+			<select id="payType" name="payType" value="${payType }"  >
+				<option value="0" <c:if test="${payType == 0}">selected</c:if> >全部</option>
+				<option value="1"  <c:if test="${payType == 1}">selected</c:if>>现金</option>
+				<option value="2"  <c:if test="${payType == 2}">selected</c:if>>点券</option>
+				<option value="3" <c:if test="${payType == 3}">selected</c:if> >现金点券</option>
+				<option value="4" <c:if test="${payType == 4}">selected</c:if> >赠送</option>
+				<option value="5" <c:if test="${payType == 5}">selected</c:if> >VIP</option>
+				
+			</select>
+			</td>
 			<td width="10%" align="right">销售时间：</td>
 			<td width="30%" align="left">
 			<input type="text" class="text" name="startTime" id="startTime" value="${startTime}" />
@@ -69,31 +81,107 @@ $(function(){
 		<c:if test="${f.payType == 4}">
 			赠送
 		</c:if>
-		
+		<c:if test="${f.payType == 5}">
+			VIP
+		</c:if>
 		
 		</display:column>
 		<display:column title="销售数量"  style="text-align:right;">${f.number}件</display:column>
-		<display:column title="销售金额"  style="text-align:right;">
+		
+		<display:column title="退货数量"  style="text-align:right;">${f.number2}件</display:column>
+		
+		<display:column title="销售金额（现金）"  style="text-align:right;">
 		
 		<c:if test="${f.payType == 1}">
-		${f.number * f.g_money} 元
+						<fmt:formatNumber type="number" value="${f.number * f.g_money}" pattern="0.00" maxFractionDigits="2"/> 
+		 元
+		</c:if>
+		<c:if test="${f.payType == 2}">
+		0 元
+		</c:if>
+		<c:if test="${f.payType == 3}">
+			<fmt:formatNumber type="number" value="${f.number * f.g_moneyCre}" pattern="0.00" maxFractionDigits="2"/> 
+		
+		 元
+		</c:if>
+		<c:if test="${f.payType == 4}">
+			0元
+		</c:if>
+		<c:if test="${f.payType == 5}">
+		0 元
+		</c:if>
+		</display:column>
+		
+			<display:column title="销售金额（点卷）"  style="text-align:right;">
+		
+		<c:if test="${f.payType == 1}">
+						0
+		 卷
 		</c:if>
 		<c:if test="${f.payType == 2}">
 		${f.number * f.g_credit} 券
 		</c:if>
 		<c:if test="${f.payType == 3}">
-		${f.number * f.g_moneyCre} 元,	${f.number * f.g_creditMon} 券
+			${f.number * f.g_creditMon} 券
+		</c:if>
+		<c:if test="${f.payType == 4}">
+			0券
+		</c:if>
+		<c:if test="${f.payType == 5}">
+		${f.number *f.g_vipCreditMon} 券
+		</c:if>
+		</display:column>
+		
+		<display:column title="实际收入（现金）"  style="text-align:right;">
+		
+		<c:if test="${f.payType == 1}">
+		
+		<fmt:formatNumber type="number" value="${(f.number -f.number2) * f.g_money}" pattern="0.00" maxFractionDigits="2"/> 
+		 
+		 元
+		</c:if>
+		<c:if test="${f.payType == 2}">
+		0元
+		</c:if>
+		<c:if test="${f.payType == 3}">
+		
+		<fmt:formatNumber type="number" value="${(f.number -f.number2) * f.g_moneyCre}" pattern="0.00" maxFractionDigits="2"/> 
+		 
+		 元
 		</c:if>
 		<c:if test="${f.payType == 4}">
 			0元
+		</c:if>
+		
+		<c:if test="${f.payType == 5}">
+		0元
 		</c:if></display:column>
 		
+			<display:column title="实际收入（点卷）"  style="text-align:right;">
+		
+		<c:if test="${f.payType == 1}">
+		
+		0卷
+		</c:if>
+		<c:if test="${f.payType == 2}">
+		${(f.number -f.number2) * f.g_credit} 券
+		</c:if>
+		<c:if test="${f.payType == 3}">
+		
+			${(f.number -f.number2) * f.g_creditMon} 券
+		</c:if>
+		<c:if test="${f.payType == 4}">
+			0卷
+		</c:if>
+		
+		<c:if test="${f.payType == 5}">
+		${(f.number -f.number2) * f.g_vipCreditMon} 券
+		</c:if></display:column>
 	
 	</display:table>	
 	</form>	
 <br>
 <div id="paging" class="page"></div>
-
 
 </body>
 </html>
