@@ -80,7 +80,7 @@ public class GoodsService extends GenericService<Goods> {
             row.createCell(3).setCellValue(goods.getType().getName());    
             row.createCell(4).setCellValue(goods.getFactory().getName());
             row.createCell(5).setCellValue(goods.getInPrice());
-            row.createCell(6).setCellValue(goods.getInventory());
+            row.createCell(6).setCellValue(goods.getSum());
             row.createCell(7).setCellValue(goods.getMoney());
             row.createCell(8).setCellValue(goods.getCredit());
             row.createCell(9).setCellValue(goods.getMoneyCre() + " + " + goods.getCreditMon());
